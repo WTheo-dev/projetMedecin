@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 06 oct. 2023 à 10:13
+-- Généré le : ven. 06 oct. 2023 à 10:14
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.0.26
 
@@ -20,6 +20,40 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `medecin`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `medecin`
+--
+
+DROP TABLE IF EXISTS `medecin`;
+CREATE TABLE IF NOT EXISTS `medecin` (
+  `id_medecin` int NOT NULL AUTO_INCREMENT,
+  `Civilité` char(10) DEFAULT NULL,
+  `Nom` varchar(50) DEFAULT NULL,
+  `Prénom` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_medecin`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `patient`
+--
+
+DROP TABLE IF EXISTS `patient`;
+CREATE TABLE IF NOT EXISTS `patient` (
+  `Id_patient` int NOT NULL AUTO_INCREMENT,
+  `NumSecu` char(50) NOT NULL,
+  `Civilité` char(10) DEFAULT NULL,
+  `nom` varchar(50) DEFAULT NULL,
+  `Prénom` varchar(50) DEFAULT NULL,
+  `Adresse` varchar(50) DEFAULT NULL,
+  `DateNaissance` date DEFAULT NULL,
+  `LieuNaissance` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`Id_patient`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
