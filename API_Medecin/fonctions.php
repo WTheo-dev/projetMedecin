@@ -31,30 +31,25 @@ function estConnecte() {
 }
 
 
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////       GESTION DES PATIENTS          ////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
 function listePatient(){
-
+    $BD = connexionBD();
+    $listePatient = $BD->prepare('SELECT * from patient');
 }
 
 function ajouterPatient($civilité,$nom, $prenom) {
-    
+    $BD = connexionBD();
 }
 
 function supprimerPatient($idPatient){
-
+    $BD = connexionBD();
 }
 
 function modifierPatient(){
-
+    $BD = connexionBD();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -62,15 +57,16 @@ function modifierPatient(){
 /////////////////////////////////////////////////////////////////////////////
 
 function listeMedecin() {
-
+    $BD = connexionBD();
+    $listeMedecin = $BD->prepare('SELECT * from medecin');
 }
 
 function ajouterMedecin() {
-
+    $BD = connexionBD();
 }
 
-function medecinReferent(){
-
+function ajouterMedecinReferent(){
+    $BD = connexionBD();
 }
 
 
@@ -79,31 +75,32 @@ function medecinReferent(){
 /////////////////////////////////////////////////////////////////////////////
 
 function affichageConsultation() {
-
+    $BD = connexionBD();
+    $listeConsultation = $BD->prepare('SELECT * from rendezvous');
 }
 
 function ajouterConsultation() {
-
+    $BD = connexionBD();
 }
 
 function modifierConsultation() {
-
+    $BD = connexionBD();
 }
 
 function modifierConsultationExistante() {
-
+    $BD = connexionBD();
 }
 
 function supprimerConsulation() {
-
+    $BD = connexionBD();
 }
 
 function filtreConsultation() {
-
+    $BD = connexionBD();
 }
 
 function ChevauchementNonOK() {
-
+    $BD = connexionBD();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -111,5 +108,5 @@ function ChevauchementNonOK() {
 /////////////////////////////////////////////////////////////////////////////
 
 function tempsTotalConsultation(){
-    
+    $BD = connexionBD();
 }
