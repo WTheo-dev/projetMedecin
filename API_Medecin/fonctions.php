@@ -5,8 +5,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 function connexionBD(){
+    $host = 'localhost';
+    $db = 'medecin';
+    $user = 'root';
+    $pass = ' ';
     try{
-        $BD = new PDO("mysql:host=localhost;dbname=medecin",'utilisateur','password');
+        $BD = new PDO("mysql:host=$host;dbname=$db",$user,$pass);
     }catch(PDOException $e){
         die('Erreur : '.$e->getMessage());
     }
@@ -46,6 +50,9 @@ function ajouterPatient($civilité,$nom, $prenom) {
 
 function supprimerPatient($idPatient){
     $BD = connexionBD();
+    $idPatient = htmlspecialchars($idPatient);
+    $supprimerPatient = $BD->prepare('DELETE patient from id_Patient');
+    $supprimerPatient->execute(array($idPatient));
 }
 
 function modifierPatient(){
@@ -63,6 +70,15 @@ function listeMedecin() {
 
 function ajouterMedecin() {
     $BD = connexionBD();
+
+}
+
+function supprimerMedecin($idMedecin) {
+    $BD = connexionBD();
+    $idMedecin = htmlspecialchars($idMedecin);
+    $supprimerMedecin = $BD->prepare('DELETE medecin from id_Medecin');
+    $supprimerMedecin->execute(array($idMedecin));
+
 }
 
 function ajouterMedecinReferent(){
@@ -91,8 +107,11 @@ function modifierConsultationExistante() {
     $BD = connexionBD();
 }
 
-function supprimerConsulation() {
+function supprimerConsulation($idConsultation) {
     $BD = connexionBD();
+    $idConsultation = htmlspecialchars($idConsultation);
+    $supprimerConsulation = $BD->prepare('DELETE consultation from id_Consultation');
+    $supprimerConsulation->execute(array($idConsultation));
 }
 
 function filtreConsultation() {
