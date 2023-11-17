@@ -46,17 +46,33 @@ function listePatient(){
 
 function ajouterPatient($civilité,$nom, $prenom) {
     $BD = connexionBD();
+    $addPatient = $BD->prepare('INSERT INTO patient ');
+    $addPatient->execute(array());
 }
 
 function supprimerPatient($idPatient){
     $BD = connexionBD();
     $idPatient = htmlspecialchars($idPatient);
-    $supprimerPatient = $BD->prepare('DELETE patient from id_Patient');
+    $supprimerPatient = $BD->prepare('DELETE patient where id_Patient = ?');
     $supprimerPatient->execute(array($idPatient));
+    $BD = null;
+    if ($supprimerPatient->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
-function modifierPatient(){
+function modifierPatient($idPatient){
     $BD = connexionBD();
+    $idPatient = htmlspecialchars($idPatient);
+    $modifierPatient = $BD->prepare('UPDATE INTO patient');
+    $modifierPatient-> execute(array($idPatient));
+    if($modifierPatient->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -70,15 +86,19 @@ function listeMedecin() {
 
 function ajouterMedecin() {
     $BD = connexionBD();
-
 }
 
 function supprimerMedecin($idMedecin) {
     $BD = connexionBD();
     $idMedecin = htmlspecialchars($idMedecin);
-    $supprimerMedecin = $BD->prepare('DELETE medecin from id_Medecin');
+    $supprimerMedecin = $BD->prepare('DELETE medecin from id_Medecin where id_Medecin = ?');
     $supprimerMedecin->execute(array($idMedecin));
-
+    $BD = null;
+    if ($supprimerMedecin->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 function ajouterMedecinReferent(){
