@@ -53,7 +53,7 @@ function ajouterPatient($civilité,$nom, $prenom) {
 function supprimerPatient($idPatient){
     $BD = connexionBD();
     $idPatient = htmlspecialchars($idPatient);
-    $supprimerPatient = $BD->prepare('DELETE patient where id_Patient = ?');
+    $supprimerPatient = $BD->prepare('DELETE FROM patient where Id_patient = ?');
     $supprimerPatient->execute(array($idPatient));
     $BD = null;
     if ($supprimerPatient->rowCount() > 0) {
@@ -84,14 +84,23 @@ function listeMedecin() {
     $listeMedecin = $BD->prepare('SELECT * from medecin');
 }
 
-function ajouterMedecin() {
+function ajouterMedecin($Civilité, $Nom, $Prénom, $medecin) {
     $BD = connexionBD();
+    $ajouterMedecin = $BD -> prepare('INSERT INTO medecin(Civilité, Nom, Prénom) VALUES (?, ?, ?, ?)');
+    $ajouterMedecin -> execute(array(id_medecin_nom($medecin),$Civilité, $Nom, $Prénom));
+    $BD = null;
+    if ($ajouterMedecin == null) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
+
 
 function supprimerMedecin($idMedecin) {
     $BD = connexionBD();
     $idMedecin = htmlspecialchars($idMedecin);
-    $supprimerMedecin = $BD->prepare('DELETE medecin from id_Medecin where id_Medecin = ?');
+    $supprimerMedecin = $BD->prepare('DELETE from medecin where id_medecin = ?');
     $supprimerMedecin->execute(array($idMedecin));
     $BD = null;
     if ($supprimerMedecin->rowCount() > 0) {
@@ -113,7 +122,15 @@ function ajouterMedecinReferent(){
 function affichageConsultation() {
     $BD = connexionBD();
     $listeConsultation = $BD->prepare('SELECT * from rendezvous');
+    $listeConsultation -> execute(array());
+    $BD = null;
+    if ($listeConsultation == null) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
+
 
 function ajouterConsultation() {
     $BD = connexionBD();
@@ -130,7 +147,7 @@ function modifierConsultationExistante() {
 function supprimerConsulation($idConsultation) {
     $BD = connexionBD();
     $idConsultation = htmlspecialchars($idConsultation);
-    $supprimerConsulation = $BD->prepare('DELETE consultation from id_Consultation');
+    $supprimerConsulation = $BD->prepare('DELETE from rendezvous from id_Consultation');
     $supprimerConsulation->execute(array($idConsultation));
 }
 
