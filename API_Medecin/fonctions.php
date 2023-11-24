@@ -166,3 +166,37 @@ function ChevauchementNonOK() {
 function tempsTotalConsultation(){
     $BD = connexionBD();
 }
+
+/////////////////////////////////////////////////////////////////////////////
+////////////////////             GESTION API             ////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+
+function deliver_response($status, $status_message, $data){
+	header("HTTP/1.1 $status $status_message");
+	$response['status'] = $status;
+	$response['status_message'] = $status_message;
+	$response['data'] = $data;
+	$json_response = json_encode($response);
+	echo $json_response;
+}
+
+function get_body_token(string $bearer_token) : array{
+    $tokenParts = explode('.', $bearer_token);
+    $payload = base64_decode($tokenParts[1]);
+    return (array) json_decode($payload);
+}
+
+function is_connected() : void{
+	if (1 == 2) {
+		throw new ExceptionLoginRequire();
+	}
+}
+
+//function action_permited(string $action, string $ressource, int $id = null) : void
+function action_permited() : void{
+	if (1 == 2) {
+		throw new ExceptionIssuficiantPermission();
+	}
+}
+?>
