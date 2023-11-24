@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `medecin`;
 CREATE TABLE IF NOT EXISTS `medecin` (
   `id_medecin` int NOT NULL,
-  `Civilité` char(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `Civilite` char(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Nom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Prénom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Id_utilisateur` int NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
   `NumSecu` char(50) COLLATE utf8mb4_general_ci NOT NULL,
   `Civilité` char(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `nom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Prénom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `prenom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `Adresse` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `DateNaissance` date DEFAULT NULL,
   `LieuNaissance` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -80,11 +80,11 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
 -- Structure de la table `rôle`
 --
 
-DROP TABLE IF EXISTS `rôle`;
-CREATE TABLE IF NOT EXISTS `rôle` (
-  `Id_Rôle` int NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE IF NOT EXISTS `role` (
+  `Id_Role` int NOT NULL AUTO_INCREMENT,
   `Description` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`Id_Rôle`)
+  PRIMARY KEY (`Id_Role`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -98,9 +98,9 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `Id_utilisateur` int NOT NULL AUTO_INCREMENT,
   `nom_utilisateur` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `mdp` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `Id_Rôle` int NOT NULL,
+  `Id_Role` int NOT NULL,
   PRIMARY KEY (`Id_utilisateur`),
-  KEY `Id_Rôle` (`Id_Rôle`)
+  KEY `Id_Role` (`Id_Role`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 COMMIT;
 
