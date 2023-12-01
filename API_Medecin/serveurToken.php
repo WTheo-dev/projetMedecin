@@ -4,6 +4,7 @@ require_once("jwt_utils.php");
 require_once("fonctions.php");
 
 $header = array("alg" => "HS256", "typ"=>"JWT");
+$key = "pass";
 header("Content-Type:application/json");
 $methodeHTTP = $_SERVER['REQUEST_METHOD'];
 $cle = "pass";
@@ -29,7 +30,7 @@ switch ($methodeHTTP) {
 			}
 			if($RETURN_CODE < 400){
 				$STATUS_MESSAGE = "Connexion autorisé !";
-				$matchingData = generate_jwt($header, $body ,$cle);	
+				$matchingData = generate_jwt($header, $body ,$key);	
 			}
 							
 		} catch (\Throwable $th) {
