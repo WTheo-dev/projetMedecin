@@ -4,36 +4,48 @@
 ////////////////////   CONNEXION A LA BASE DE DONNEES    ////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-function connexionBD(){
-    $host = 'localhost';
-    $db = 'medecin';
-    $user = 'root';
-    $pass = ' ';
-    try{
-        $BD = new PDO("mysql:host=$host;dbname=$db",$user,$pass);
-    }catch(PDOException $e){
-        die('Erreur : '.$e->getMessage());
-    }
-    return $BD;
+function connexionBD()
+{
+  $SERVER = '127.0.0.1';
+  $BD = 'medecin';
+  $LOGIN = 'root';
+  $MDP = '';
 
+  try {
+    $BD = new PDO("mysql:host=$SERVER;dbname=$BD", $LOGIN, $MDP);
+  } catch (PDOException $e) {
+    die('Erreur : ' . $e->getMessage());
+  }
+  return $BD;
 }
-function identification($login, $password) {
+
+function identification($login, $password){
     $login = htmlspecialchars($login);
     $password = htmlspecialchars($password);
     $BD = connexionBD();
-
-
-
+    $verificationMembre = $BD->prepare('SELECT * FROM utilisateur WHERE nom_utilisateur = ? AND mdp = ?');
+    $verificationMembre->execute(array($login, $password));
+    $BD = null;
+    if($verificationMembre->rowCount() > 0){
+        return TRUE;
+    }else{
+        return FALSE;
+    } 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-////////////////////    GESTION DES AUTHENTIFICATIONS    ////////////////////
-/////////////////////////////////////////////////////////////////////////////
-
-function estConnecte() {
-
+function  recuperation_role($login)  {
+    $BD = connexionBD();
+    $recuperationRoleMembre = $BD->prepare('SELECT id_role FROM utilisateur WHERE nom_utilisateur = ?');
+    $recuperationRoleMembre->execute(array($login));
+    $BD = null;
+    if($recuperationRoleMembre->rowCount() > 0){
+        foreach($recuperationRoleMembre as $row){
+            return $row['id_role'];
+        }
+    }else{
+        return FALSE;
+    } 
 }
-
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////       GESTION DES PATIENTS          ////////////////////
@@ -87,7 +99,7 @@ function listeMedecin() {
 function ajouterMedecin($Civilité, $Nom, $Prénom, $medecin) {
     $BD = connexionBD();
     $ajouterMedecin = $BD -> prepare('INSERT INTO medecin(Civilité, Nom, Prénom) VALUES (?, ?, ?, ?)');
-    $ajouterMedecin -> execute(array(id_medecin_nom($medecin),$Civilité, $Nom, $Prénom));
+    $ajouterMedecin -> execute(array(($medecin),$Civilité, $Nom, $Prénom));
     $BD = null;
     if ($ajouterMedecin == null) {
         return TRUE;
@@ -166,3 +178,37 @@ function ChevauchementNonOK() {
 function tempsTotalConsultation(){
     $BD = connexionBD();
 }
+
+/////////////////////////////////////////////////////////////////////////////
+////////////////////             GESTION API             ////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+
+function deliver_response($status, $status_message, $data){
+	header("HTTP/1.1 $status $status_message");
+	$response['status'] = $status;
+	$response['status_message'] = $status_message;
+	$response['data'] = $data;
+	$json_response = json_encode($response);
+	echo $json_response;
+}
+
+function get_body_token(string $bearer_token) : array{
+    $tokenParts = explode('.', $bearer_token);
+    $payload = base64_decode($tokenParts[1]);
+    return (array) json_decode($payload);
+}
+
+function is_connected() : void{
+	if (1 == 2) {
+		throw new ExceptionLoginRequire();
+	}
+}
+
+//function action_permited(string $action, string $ressource, int $id = null) : void
+function action_permited() : void{
+	if (1 == 2) {
+		throw new ExceptionIssuficiantPermission();
+	}
+}
+?>

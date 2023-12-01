@@ -6,7 +6,7 @@ require_once("fonctions.php");
 $header = array("alg" => "HS256", "typ"=>"JWT");
 header("Content-Type:application/json");
 $methodeHTTP = $_SERVER['REQUEST_METHOD'];
-$key = "pass";
+$cle = "pass";
 
 switch ($methodeHTTP) {
 	
