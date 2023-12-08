@@ -20,7 +20,9 @@
     switch ($http_method) {
         
         case 'GET':
-            if ()
+            if ($role == 2 ) {
+                
+            }
         
             try{
                 $RETURN_CODE = 200;

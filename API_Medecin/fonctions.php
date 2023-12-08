@@ -54,19 +54,37 @@ function  recuperation_role($login)  {
 function listePatient(){
     $BD = connexionBD();
     $listePatient = $BD->prepare('SELECT * from patient');
+    $listePatient ->execute(array());
+    $result = [];
+    foreach($listePatient as $row) {
+        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance']));
+    }
+    return $result;
 }
 
-function ajouterPatient($civilité,$nom, $prenom) {
+function ajouterPatient($num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance) {
     $BD = connexionBD();
-    $addPatient = $BD->prepare('INSERT INTO patient ');
-    $addPatient->execute(array());
+    if (!empty($num_secu) && !empty($civilite) && !empty($nom) && !empty($prenom) && !empty($adresse) && !empty($date_naissance) && !empty($lieu_naissance)) {
+        $ajouterPatient = $BD -> prepare('INSERT INTO patient(num_secu, civilite, nom, prenom, adresse, date_naissance, lieu_naissance VALUES (?, ?, ?, ?, ?, ?, ?)');
+        $ajouterPatient -> execute(array($num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance));
+        $BD = null;
+
+        if($ajouterPatient -> rowCount() > 0 ) {
+            return TRUE; 
+        } else {
+            return FALSE;
+        }
+    } else {
+        return FALSE;
+    }
+
 }
 
-function supprimerPatient($idPatient){
+function supprimerPatient($id_patient){
     $BD = connexionBD();
-    $idPatient = htmlspecialchars($idPatient);
-    $supprimerPatient = $BD->prepare('DELETE FROM patient where Id_patient = ?');
-    $supprimerPatient->execute(array($idPatient));
+    $id_patient = htmlspecialchars($id_patient);
+    $supprimerPatient = $BD->prepare('DELETE FROM patient where id_patient = ?');
+    $supprimerPatient->execute(array($id_patient));
     $BD = null;
     if ($supprimerPatient->rowCount() > 0) {
         return TRUE;
@@ -75,11 +93,11 @@ function supprimerPatient($idPatient){
     }
 }
 
-function modifierPatient($idPatient){
+function modifierPatient($id_patient, $num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance){
     $BD = connexionBD();
-    $idPatient = htmlspecialchars($idPatient);
-    $modifierPatient = $BD->prepare('UPDATE INTO patient');
-    $modifierPatient-> execute(array($idPatient));
+    $id_patient = htmlspecialchars($id_patient);
+    $modifierPatient = $BD->prepare('UPDATE patient SET num_secu = ?, civilite = ?, nom = ?, prenom = ?, adresse = ?, date_naissance, lieu_naissance = ? WHERE id_patient = ?');
+    $modifierPatient-> execute(array($id_patient, $num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance));
     if($modifierPatient->rowCount() > 0) {
         return TRUE;
     } else {
@@ -94,12 +112,18 @@ function modifierPatient($idPatient){
 function listeMedecin() {
     $BD = connexionBD();
     $listeMedecin = $BD->prepare('SELECT * from medecin');
+    $listeMedecin -> execute(array());
+    if($listeMedecin->rowCount()> 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
-function ajouterMedecin($Civilité, $Nom, $Prénom, $medecin) {
+function ajouterMedecin($civilite, $nom, $prenom) {
     $BD = connexionBD();
-    $ajouterMedecin = $BD -> prepare('INSERT INTO medecin(Civilité, Nom, Prénom) VALUES (?, ?, ?, ?)');
-    $ajouterMedecin -> execute(array(($medecin),$Civilité, $Nom, $Prénom));
+    $ajouterMedecin = $BD -> prepare('INSERT INTO medecin(civilite, nom, prenom) VALUES (?, ?, ?, ?)');
+    $ajouterMedecin -> execute(array($civilite, $nom, $prenom));
     $BD = null;
     if ($ajouterMedecin == null) {
         return TRUE;
@@ -109,11 +133,11 @@ function ajouterMedecin($Civilité, $Nom, $Prénom, $medecin) {
 }
 
 
-function supprimerMedecin($idMedecin) {
+function supprimerMedecin($id_medecin) {
     $BD = connexionBD();
-    $idMedecin = htmlspecialchars($idMedecin);
+    $id_medecin = htmlspecialchars($id_medecin);
     $supprimerMedecin = $BD->prepare('DELETE from medecin where id_medecin = ?');
-    $supprimerMedecin->execute(array($idMedecin));
+    $supprimerMedecin->execute(array($id_medecin));
     $BD = null;
     if ($supprimerMedecin->rowCount() > 0) {
         return TRUE;
@@ -122,16 +146,27 @@ function supprimerMedecin($idMedecin) {
     }
 }
 
+function modifierMedecin($id_medecin, $civilite, $nom, $prenom) {
+    $BD = connexionBD();
+    $modifierMedecin = $BD ->prepare('UPDATE medecin SET civilite = ?, nom = ?, prenom = ? WHERE id_medecin = ?');
+    $modifierMedecin ->execute(array($id_medecin, $civilite, $nom, $prenom));
+    if ($modifierMedecin ->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
 function ajouterMedecinReferent(){
     $BD = connexionBD();
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////       GESTION DES RENDEZ-VOUS       ////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-function affichageConsultation() {
+function listeConsultation() {
     $BD = connexionBD();
     $listeConsultation = $BD->prepare('SELECT * from rendezvous');
     $listeConsultation -> execute(array());
@@ -143,16 +178,25 @@ function affichageConsultation() {
     }
 }
 
+function AffichageConsultation($idConsultation) {
+    $BD = connexionBD();
+}
+
 
 function ajouterConsultation() {
     $BD = connexionBD();
+    $ajouterConsultation = $BD->prepare('INSERT INTO');
+    $ajouterConsultation ->execute(array());
+    $BD = null;
+    if ($ajouterConsultation==null) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
+
 
 function modifierConsultation() {
-    $BD = connexionBD();
-}
-
-function modifierConsultationExistante() {
     $BD = connexionBD();
 }
 
@@ -178,6 +222,7 @@ function ChevauchementNonOK() {
 function tempsTotalConsultation(){
     $BD = connexionBD();
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////             GESTION API             ////////////////////
