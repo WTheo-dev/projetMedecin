@@ -15,18 +15,18 @@
     ('3333333333', 'M.', 'Li', 'Jian', '123 Bamboo Lane', '1978-11-12', 'Shanghai');
 
     -- Insertion de données de test pour la table rendezvous
-    INSERT INTO `rendezvous` (`id_patient`, `dateheure_rdv`, `duree_rdv`, `id_medecin`) VALUES
-    (1, '2023-10-10 09:00:00', '00:30:00', 1),
-    (2, '2023-10-15 14:30:00', '00:45:00', 3),
-    (3, '2023-10-20 11:15:00', '01:00:00', 2),
-    (4, '2023-10-25 10:30:00', '00:30:00', 4),
-    (5, '2023-11-05 15:15:00', '00:45:00', 6),
-    (6, '2023-11-10 08:45:00', '01:15:00', 5);
+    INSERT INTO `rendezvous` (`id_patient`, `id_rendezvous`, `dateheure_rdv`, `duree_rdv`, `id_medecin`) VALUES
+    (1, 1,'2023-10-10 09:00:00', '00:30:00', 1),
+    (2, 2,'2023-10-15 14:30:00', '00:45:00', 3),
+    (3, 3,'2023-10-20 11:15:00', '01:00:00', 2),
+    (4, 4,'2023-10-25 10:30:00', '00:30:00', 4),
+    (5, 5,'2023-11-05 15:15:00', '00:45:00', 6),
+    (6, 6,'2023-11-10 08:45:00', '01:15:00', 5);
 
     INSERT INTO `role` (`id_role`,`description`) VALUES
-    (1, 'medecin'),
-    (2, 'secretaire'),
-    (3, 'patient');
+    (1, 'Medecin'),
+    (2, 'Secretaire'),
+    (3, 'Patient');
     
     INSERT INTO `utilisateur` (`id_utilisateur`,`nom_utilisateur`,`mdp`, `id_role`) VALUES 
     (1, 'utilisateur1', 'motdepasse1', 3),
