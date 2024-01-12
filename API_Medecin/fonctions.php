@@ -57,7 +57,7 @@ function listePatient(){
     $listePatient ->execute(array());
     $result = [];
     foreach($listePatient as $row) {
-        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance']));
+        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance'], 'id_patient'=> $row['id_patient']));
     }
     return $result;
 }
@@ -65,12 +65,12 @@ function listePatient(){
 function unPatient($nom) {
     $BD = connexionBD();
     $nom = htmlspecialchars($nom);
-    $UnPatient = $BD ->prepare('SELECT * from patient WHERE nom = ?, prenom = ?');
+    $UnPatient = $BD ->prepare('SELECT * from patient WHERE nom = ?');
     $UnPatient -> execute(array($nom));
     $BD = null;
     $result = [];
     foreach($UnPatient as $row) {
-        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance']));
+        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance'], 'id_patient'=> $row['id_patient']));
     }
     return $result;
 }

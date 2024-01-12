@@ -51,11 +51,37 @@
             break;
         
         case 'PUT' :
-            // Ajouter le code pour la méthode PUT
+            $matchingData =  null;
+            $id_medecin = $_GET['id_medecin'];
+            if(modifierMedecin($id_medecin, $data['civilite'],$data['nom'],$data['prenom'])) {
+                $RETURN_CODE = 200;
+                $STATUS_MESSAGE = "Mise à jour du Patient effectuée";
+            } else {
+                $RETURN_CODE = 400;
+                $STATUS_MESSAGE = "Erreur de syntaxe ou id_patient invalide";
+            }
+            deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
             break;
 
         case 'DELETE' :
-            // Ajouter le code pour la méthode DELETE
+            $id_medecin = $_GET['id_patient'];
+
+            if ($id_medecin) {
+                $result = supprimerPatient($id_medecin);
+                if ($result === true) {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Le médecin a été supprimé avec succès.";
+                    $matchingData = null;
+                } else {
+                    $RETURN_CODE = 400;
+                    $STATUS_MESSAGE = "Le médecin n'existe pas ou à déjà été supprimé";
+                    $matchingData = null;
+                }
+            } else {
+                $RETURN_CODE = 400;
+                $STATUS_MESSAGE = "L'ID du medecin est requis";
+            }
+            deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
             break;
         
     }
