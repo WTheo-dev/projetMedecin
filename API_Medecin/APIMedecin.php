@@ -18,23 +18,45 @@
 	$data=json_decode($postedData, true);
     
     switch ($http_method) {
-    
         case 'GET':
-            if (rôle)
+            if(isset($_GET['id_medecin'])) {
+                try {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE= "Voici le Médecin :";
+                    $matchingData = unMedecin($_GET['id_medecin']);
+                } catch (\Throwable $th) {
+                    $RETURN_CODE = $th ->getCode();
+                    $STATUS_MESSAGE = $th ->getMessage();
+                    $matchingData = null;
+                } finally {
+                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                }
+            } else {
+                try {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Voici la liste des Médecins :";
+                    $matchingData = listeMedecin();
+                } catch (\Throwable $th) {
+                    $RETURN_CODE = $th->getCode();
+                    $STATUS_MESSAGE = $th->getMessage();
+                    $matchingData = null;
+                } finally {
+                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                }
+            }   
+            break;
         
-            try{
-                $RETURN_CODE = 200;
-                $STATUS_MESSAGE = "Succes ! Les donnees autorisees pour votre role sont accessible";
-            } catch (\Throwable $th) {
-            $RETURN_CODE = $th->getCode();
-            $STATUS_MESSAGE = $th->getMessage();
-            $matchingData = null;
-            } finally {
-            deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
-            }
-        break;
+        case 'POST':
+            // Ajouter le code pour la méthode POST
+            break;
         
-        case "POST":
-        
+        case 'PUT' :
+            // Ajouter le code pour la méthode PUT
+            break;
+
+        case 'DELETE' :
+            // Ajouter le code pour la méthode DELETE
+            break;
         
     }
+?>

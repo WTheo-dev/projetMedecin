@@ -69,7 +69,7 @@ function get_bearer_token() {
 
     // HEADER: Get the access token from the header
     if (!empty($headers)) {
-        if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+        if (preg_match('/Medecin\s(\S+)/', $headers, $matches)) {
             return $matches[1];
         }
     }

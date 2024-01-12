@@ -21,7 +21,12 @@ switch ($methodeHTTP) {
 			}else{
 				if(identification($data['login'], $data['password'])){
 					$RETURN_CODE = 201;
-					$body = array("role" => recuperation_role($data['login']), "utilisateur" => $data['login'],"exp" => (time()+600));
+					$duree = 2592000;
+					$body = array(
+						"role" => recuperation_role($data['login']),
+						"utilisateur" => $data['login'],
+						"exp" => (time() + $duree)
+					);
 				}else{
 					$RETURN_CODE = 400;
 					$STATUS_MESSAGE = "Identifiant incorrect";

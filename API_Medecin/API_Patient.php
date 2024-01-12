@@ -1,6 +1,6 @@
 <?php
     require_once("jwt_utils.php");
-    require_once("fonction.php");
+    require_once("fonctions.php");
     header("Content-Type:application/json");
     $http_method = $_SERVER['REQUEST_METHOD'];
     
@@ -19,18 +19,33 @@
 
     switch($http_method) {
 
-        case 'GET' :
-            try {
-
-            } catch (\Throwable $th) {
-			$RETURN_CODE = $th->getCode();
-			$STATUS_MESSAGE = $th->getMessage();
-			$matchingData = null;
-		} finally {
-			deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
-		}
-		break;
-	
+        case 'GET':
+            if(isset($_GET['id_patient'])) {
+                try {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE= "Voici le Patient :";
+                    $matchingData = unPatient($_GET['nom']);
+                } catch (\Throwable $th) {
+                    $RETURN_CODE = $th ->getCode();
+                    $STATUS_MESSAGE = $th ->getMessage();
+                    $matchingData = null;
+                } finally {
+                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                }
+            } else {
+                try {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Voici la liste des Patients :";
+                    $matchingData = listePatient();
+                } catch (\Throwable $th) {
+                    $RETURN_CODE = $th->getCode();
+                    $STATUS_MESSAGE = $th->getMessage();
+                    $matchingData = null;
+                } finally {
+                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                }
+            }   
+            break;
 	default :
 		deliver_response(405, "not implemented method", null);
 		break;

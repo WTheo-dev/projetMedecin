@@ -62,13 +62,25 @@ function listePatient(){
     return $result;
 }
 
+function unPatient($nom) {
+    $BD = connexionBD();
+    $nom = htmlspecialchars($nom);
+    $UnPatient = $BD ->prepare('SELECT * from patient WHERE nom = ?, prenom = ?');
+    $UnPatient -> execute(array($nom));
+    $BD = null;
+    $result = [];
+    foreach($UnPatient as $row) {
+        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance']));
+    }
+    return $result;
+}
+
 function ajouterPatient($num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance) {
     $BD = connexionBD();
     if (!empty($num_secu) && !empty($civilite) && !empty($nom) && !empty($prenom) && !empty($adresse) && !empty($date_naissance) && !empty($lieu_naissance)) {
         $ajouterPatient = $BD -> prepare('INSERT INTO patient(num_secu, civilite, nom, prenom, adresse, date_naissance, lieu_naissance VALUES (?, ?, ?, ?, ?, ?, ?)');
         $ajouterPatient -> execute(array($num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance));
         $BD = null;
-
         if($ajouterPatient -> rowCount() > 0 ) {
             return TRUE; 
         } else {
@@ -96,8 +108,16 @@ function supprimerPatient($id_patient){
 function modifierPatient($id_patient, $num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance){
     $BD = connexionBD();
     $id_patient = htmlspecialchars($id_patient);
+    $num_secu = htmlspecialchars($num_secu);
+    $civilite = htmlspecialchars($civilite);
+    $nom = htmlspecialchars($nom);
+    $prenom = htmlspecialchars($prenom);
+    $adresse = htmlspecialchars($adresse);
+    $date_naissance = htmlspecialchars($date_naissance);
+    $lieu_naissance = htmlspecialchars($lieu_naissance);
     $modifierPatient = $BD->prepare('UPDATE patient SET num_secu = ?, civilite = ?, nom = ?, prenom = ?, adresse = ?, date_naissance, lieu_naissance = ? WHERE id_patient = ?');
     $modifierPatient-> execute(array($id_patient, $num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance));
+    $BD = null;
     if($modifierPatient->rowCount() > 0) {
         return TRUE;
     } else {
@@ -113,13 +133,26 @@ function listeMedecin() {
     $BD = connexionBD();
     $listeMedecin = $BD->prepare('SELECT * from medecin');
     $listeMedecin -> execute(array());
-    if($listeMedecin->rowCount()> 0) {
-        return TRUE;
-    } else {
-        return FALSE;
+    $BD = null;
+    $result = [];
+    foreach($listeMedecin as $row) {
+        array_push($result, array('civilite' =>$row['civilite'], 'nom' =>$row['nom'], 'prenom' =>$row['prenom'],'id_utilisateur'=>$row['id_utilisateur']));
     }
+
+    return $result;
 }
 
+function unMedecin($id_medecin) {
+    $BD = connexionBD();
+    $UnMedecin = $BD ->prepare('SELECT * FROM medecin WHERE id_medecin = ?');
+    $UnMedecin ->execute(array($id_medecin));
+    $BD = null;
+    foreach($UnMedecin as $row) {
+        array_push($result, array('civilite' =>$row['civilite'], 'nom' =>$row['nom'], 'prenom' =>$row['prenom'],'id_utilisateur'=>$row['id_utilisateur']));
+    }
+
+    return $result;
+}
 function ajouterMedecin($civilite, $nom, $prenom) {
     $BD = connexionBD();
     $ajouterMedecin = $BD -> prepare('INSERT INTO medecin(civilite, nom, prenom) VALUES (?, ?, ?, ?)');
@@ -148,6 +181,10 @@ function supprimerMedecin($id_medecin) {
 
 function modifierMedecin($id_medecin, $civilite, $nom, $prenom) {
     $BD = connexionBD();
+    $id_medecin = htmlspecialchars($id_medecin);
+    $civilite = htmlspecialchars($civilite);
+    $nom = htmlspecialchars($nom);
+    $prenom = htmlspecialchars($prenom);
     $modifierMedecin = $BD ->prepare('UPDATE medecin SET civilite = ?, nom = ?, prenom = ? WHERE id_medecin = ?');
     $modifierMedecin ->execute(array($id_medecin, $civilite, $nom, $prenom));
     if ($modifierMedecin ->rowCount() > 0) {
@@ -178,14 +215,14 @@ function listeConsultation() {
     }
 }
 
-function AffichageConsultation($idConsultation) {
+function AffichageConsultation($id_rendezvous) {
     $BD = connexionBD();
 }
 
 
 function ajouterConsultation() {
     $BD = connexionBD();
-    $ajouterConsultation = $BD->prepare('INSERT INTO');
+    $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous(id_patient,id_rendezvous,dateheure_rdv,duree_rdv,id_medecin VALUES (?,?,?,?,?)');
     $ajouterConsultation ->execute(array());
     $BD = null;
     if ($ajouterConsultation==null) {
@@ -196,15 +233,34 @@ function ajouterConsultation() {
 }
 
 
-function modifierConsultation() {
+function modifierConsultation($id_rendezvous, $id_patient, $dateheure_rdv, $duree_rdv, $id_medecin) {
     $BD = connexionBD();
+    $id_rendezvous = htmlspecialchars($id_rendezvous);
+    $id_patient = htmlspecialchars($id_patient);
+    $dateheure_rdv = htmlspecialchars($dateheure_rdv);
+    $duree_rdv = htmlspecialchars($duree_rdv);
+    $id_medecin = htmlspecialchars($id_medecin);
+    $modifierRendezvous = $BD->prepare('UPDATE rendezvous SET id_patient = ?, dateheure_rdv = ?, duree_rdv = ? , id_medecin = ? WHERE id_rendezvous = ?');
+    $modifierRendezvous -> execute(array($id_patient,$dateheure_rdv,$duree_rdv,$id_medecin, $id_rendezvous));
+    $BD = null;
+    if ($modifierRendezvous ->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
-function supprimerConsulation($idConsultation) {
+function supprimerConsulation($id_rendezvous) {
     $BD = connexionBD();
-    $idConsultation = htmlspecialchars($idConsultation);
-    $supprimerConsulation = $BD->prepare('DELETE from rendezvous from id_Consultation');
-    $supprimerConsulation->execute(array($idConsultation));
+    $id_rendezvous = htmlspecialchars($id_rendezvous);
+    $supprimerConsulation = $BD->prepare('DELETE from rendezvous WHERE id_rendezvous = ?');
+    $supprimerConsulation->execute(array($id_rendezvous));
+    $BD = null;
+    if($supprimerConsulation ->rowCount()> 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 function filtreConsultation() {

@@ -20,21 +20,22 @@
     switch ($http_method) {
         
         case 'GET':
-            if ($role == 2 ) {
-                
+            if ($role == 1 || 2) {
+                try {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Voici la liste des Consultations :";
+                    $matchingData = listeConsultation();
+                } catch (\Throwable $th) {
+                    $RETURN_CODE = $th->getCode();
+                    $STATUS_MESSAGE = $th->getMessage();
+                    $matchingData = null;
+                } finally {
+                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                }
+            } else {
+                deliver_response(403, "Echec, le rôle n'est pas autorisé pour avoir accès à ces données", null);
             }
-        
-            try{
-                $RETURN_CODE = 200;
-                $STATUS_MESSAGE = "Succes ! Les donnees autorisees pour votre role sont accessible";
-            } catch (\Throwable $th) {
-            $RETURN_CODE = $th->getCode();
-            $STATUS_MESSAGE = $th->getMessage();
-            $matchingData = null;
-            } finally {
-            deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
-            }
-        break;
+            break;
         
         case "POST":
     }
