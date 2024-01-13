@@ -235,7 +235,7 @@ function listeConsultationDuJour() {
     $BD = connexionBD();
     
     setlocale(LC_TIME, 'fr_FR');
-    $dateDuJour = (new DateTime())->format('Y-m-d');
+    $dateDuJour = (new DateTime())->format('d-m-Y');
 
     
     $listeConsultationDuJour = $BD->prepare('SELECT * FROM rendezvous WHERE date_rdv = ?');
@@ -244,7 +244,6 @@ function listeConsultationDuJour() {
     $result = [];
     
     foreach ($listeConsultationDuJour as $row) {
-        // Utilisez strftime pour formater la date en français
         $jourDuRendezVous = (new DateTime($row['date_rdv']))->format('l');
 
         
