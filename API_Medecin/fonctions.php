@@ -168,7 +168,7 @@ function listeMedecin()
     $BD = null;
     $result = [];
     foreach ($listeMedecin as $row) {
-        array_push($result, array('id_medecin'=> $row['id_medecin'],'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'id_utilisateur' => $row['id_utilisateur']));
+        array_push($result, array('id_medecin' => $row['id_medecin'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'id_utilisateur' => $row['id_utilisateur']));
     }
 
     return $result;
@@ -289,13 +289,15 @@ function listeConsultation()
 
     foreach ($listeConsultation as $row) {
         $formattedDate = date('d-m-Y', strtotime($row['date_rdv']));
-        array_push($result, array(
-            'Jour du rendez-vous' => $formattedDate,
-            'Heure du rendez-vous' => $row['heure_rdv'],
-            'Durée du Rendez-Vous' => $row['duree_rdv'],
-            'id_medecin' => $row['id_medecin'],
-            'id_rendezvous' => $row['id_rendezvous']
-        )
+        array_push(
+            $result,
+            array(
+                'Jour du rendez-vous' => $formattedDate,
+                'Heure du rendez-vous' => $row['heure_rdv'],
+                'Durée du Rendez-Vous' => $row['duree_rdv'],
+                'id_medecin' => $row['id_medecin'],
+                'id_rendezvous' => $row['id_rendezvous']
+            )
         );
     }
 
@@ -313,12 +315,14 @@ function uneConsultation($id_rendezvous)
 
     foreach ($uneConsultation as $row) {
         $formattedDate = date('d-m-Y', strtotime($row['date_rdv']));
-        array_push($result, array(
-            'Jour du rendez-vous' => $formattedDate,
-            'Heure du rendez-vous' => $row['heure_rdv'],
-            'Durée du Rendez-Vous' => $row['duree_rdv'],
-            'id_medecin' => $row['id_medecin']
-        )
+        array_push(
+            $result,
+            array(
+                'Jour du rendez-vous' => $formattedDate,
+                'Heure du rendez-vous' => $row['heure_rdv'],
+                'Durée du Rendez-Vous' => $row['duree_rdv'],
+                'id_medecin' => $row['id_medecin']
+            )
         );
     }
 
@@ -340,10 +344,12 @@ function listeConsultationDuJour()
 
     foreach ($listeConsultationDuJour as $row) {
 
-        array_push($result, array(
-            'Date du rendez-vous' => (new DateTime($row['date_rdv']))->format('d-m-Y'),
-            'Heure du rendez-vous' => $row['heure_rdv']
-        )
+        array_push(
+            $result,
+            array(
+                'Date du rendez-vous' => (new DateTime($row['date_rdv']))->format('d-m-Y'),
+                'Heure du rendez-vous' => $row['heure_rdv']
+            )
         );
     }
 
@@ -353,16 +359,21 @@ function listeConsultationDuJour()
 
 
 
-function ajouterConsultation($id_patient,$date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
+function ajouterConsultation($id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
 {
     $BD = connexionBD();
-    $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous(id_patient,date_rdv,heure_rdv,duree_rdv,id_medecin VALUES (?,?,?,?,?)');
-    $ajouterConsultation->execute(array(clean($id_patient), clean($date_rdv), clean($heure_rdv), clean($duree_rdv), clean($id_medecin)));
+    $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous (id_patient, date_rdv, heure_rdv, duree_rdv, id_medecin) VALUES (?, ?, ?, ?, ?)');
+
+    // Exécution de la requête préparée
+    $success = $ajouterConsultation->execute(array(clean($id_patient), clean($date_rdv), clean($heure_rdv), clean($duree_rdv), clean($id_medecin)));
+
     $BD = null;
-    if ($ajouterConsultation == null) {
-        return TRUE;
+
+    // Vérification du succès de l'exécution
+    if ($success) {
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -370,9 +381,8 @@ function ajouterConsultation($id_patient,$date_rdv, $heure_rdv, $duree_rdv, $id_
 function modifierConsultation($id_rendezvous, $id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
 {
     $BD = connexionBD();
-    $id_rendezvous = htmlspecialchars($id_rendezvous);
     $id_patient = htmlspecialchars($id_patient);
-    $dateheure_rdv = htmlspecialchars($date_rdv);
+    $date_rdv = htmlspecialchars($date_rdv);
     $heure_rdv = htmlspecialchars($heure_rdv);
     $duree_rdv = htmlspecialchars($duree_rdv);
     $id_medecin = htmlspecialchars($id_medecin);
@@ -399,6 +409,21 @@ function supprimerConsulation($id_rendezvous)
         return FALSE;
     }
 }
+
+function ConsultationDejaExistante($id_medecin, $id_patient, $date_rdv, $heure_rdv)
+{
+    $BD = connexionBD();
+    $consultationExiste = $BD->prepare('SELECT * FROM rendezvous WHERE id_medecin = ? AND id_patient = ? AND date_rdv = ? AND heure_rdv = ?');
+    $consultationExiste->execute(array($id_medecin, $id_patient, $date_rdv, $heure_rdv));
+    $BD = null;
+
+    if ($consultationExiste->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 
 function filtreConsultation()
 {

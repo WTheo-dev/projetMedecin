@@ -49,23 +49,35 @@ switch ($http_method) {
         break;
     
 
-    case 'POST':
-        $matchingData = null;
-        if (ajouterConsultation($data['id_patient'],$data['date_rdv'],$data['heure_rdv'],$data['duree_rdv'], $data['$id_medecin'])) {
-            $RETURN_CODE = 200;
-            $STATUS_MESSAGE = "Création du rendez-vous effectué";
-        } else {
-            $RETURN_CODE = 400;
-            $STATUS_MESSAGE = "Création impossible ou rendez-vous déjà existant";
-        }
-        deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
-        break;
+        case 'POST':
+            $matchingData = null;
+            $id_medecin = $data['id_medecin'];
+            $id_patient = $data['id_patient'];
+            $date_rdv = $data['date_rdv'];
+            $heure_rdv = $data['heure_rdv'];
+            
+            // Modification de la condition pour prendre en compte id_medecin, id_patient, date_rdv et heure_rdv
+            if (ConsultationDejaExistante($id_medecin, $id_patient, $date_rdv, $heure_rdv)) {
+                $RETURN_CODE = 400;
+                $STATUS_MESSAGE = "Création impossible, consultation déjà existante pour le même médecin et patient à la même heure";
+            } else {
+                if (ajouterConsultation($data['id_patient'], $data['date_rdv'], $data['heure_rdv'], $data['duree_rdv'], $data['id_medecin'])) {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Création du rendez-vous effectué";
+                } else {
+                    $RETURN_CODE = 400;
+                    $STATUS_MESSAGE = "Création impossible ou rendez-vous déjà existant";
+                }
+            }
+            deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+            break;
+        
 
     case 'PUT':
         $matchingData = null;
-        $id_rendezvous = $_GET['$id_rendezvous'];
+        $id_rendezvous = $_GET['id_rendezvous'];
 
-            if(modifierConsultation($id_rendezvous,$data['id_patient'],$data['date_rdv'],$data['heure_rdv'],$data['duree_rdv'], $data['$id_medecin'])) {
+            if(modifierConsultation($id_rendezvous,$data['id_patient'],$data['date_rdv'],$data['heure_rdv'],$data['duree_rdv'], $data['id_medecin'])) {
                 $RETURN_CODE = 200;
                 $STATUS_MESSAGE = "Modifications du rendez-vous effectuée.";
             } else {
