@@ -233,16 +233,30 @@ function uneConsultation($id_rendezvous) {
 
 function listeConsultationDuJour() {
     $BD = connexionBD();
-    $dateDuJour = date('Y-m-d'); 
+    
+    setlocale(LC_TIME, 'fr_FR');
+    $dateDuJour = (new DateTime())->format('Y-m-d');
+
+    
     $listeConsultationDuJour = $BD->prepare('SELECT * FROM rendezvous WHERE date_rdv = ?');
-    $listeConsultationDuJour->execute(array($dateDuJour));
+    $listeConsultationDuJour->execute(array($dateDuJour));  // Fournissez la date actuelle comme valeur
     $BD = null;
     $result = [];
+    
     foreach ($listeConsultationDuJour as $row) {
-        array_push($result, array('Jour du rendez-vous' => $row['date_rdv'], 'Heure du rendez-vous' => $row['heure_rdv']));
+        // Utilisez strftime pour formater la date en français
+        $jourDuRendezVous = (new DateTime($row['date_rdv']))->format('l');
+
+        
+        array_push($result, array(
+            'Jour du rendez-vous' => $jourDuRendezVous,
+            'Heure du rendez-vous' => $row['heure_rdv']
+        ));
     }
+    
     return $result;
 }
+
 
 
 function ajouterConsultation() {
