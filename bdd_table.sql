@@ -67,8 +67,8 @@ DROP TABLE IF EXISTS `rendezvous`;
 CREATE TABLE IF NOT EXISTS `rendezvous` (
   `id_patient` int NOT NULL,
   `id_rendezvous` int NOT NULL,
-  `date_rdv` datetime NOT NULL,
-  `heure_rdv` datetime NOT NULL,
+  `date_rdv` date NOT NULL,
+  `heure_rdv` time NOT NULL,
   `duree_rdv` time DEFAULT NULL,
   `id_medecin` int NOT NULL,
   PRIMARY KEY (`id_patient`,`id_rendezvous`),
