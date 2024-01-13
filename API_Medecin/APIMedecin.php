@@ -22,11 +22,15 @@
             if(isset($_GET['id_medecin'])) {
                 try {
                     $RETURN_CODE = 200;
-                    $STATUS_MESSAGE= "Voici le Médecin :";
+                    $STATUS_MESSAGE = "Voici le Médecin :";
                     $matchingData = unMedecin($_GET['id_medecin']);
+                    
+                    if ($matchingData === null) {
+                        throw new Exception("Aucun médecin trouvé avec l'ID spécifié");
+                    }
                 } catch (\Throwable $th) {
-                    $RETURN_CODE = $th ->getCode();
-                    $STATUS_MESSAGE = $th ->getMessage();
+                    $RETURN_CODE = $th->getCode();
+                    $STATUS_MESSAGE = $th->getMessage();
                     $matchingData = null;
                 } finally {
                     deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
@@ -55,19 +59,19 @@
             $id_medecin = $_GET['id_medecin'];
             if(modifierMedecin($id_medecin, $data['civilite'],$data['nom'],$data['prenom'])) {
                 $RETURN_CODE = 200;
-                $STATUS_MESSAGE = "Mise à jour du Patient effectuée";
+                $STATUS_MESSAGE = "Mise à jour du Médecin effectuée";
             } else {
                 $RETURN_CODE = 400;
-                $STATUS_MESSAGE = "Erreur de syntaxe ou id_patient invalide";
+                $STATUS_MESSAGE = "Erreur de syntaxe ou id_medecin invalide";
             }
             deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
             break;
 
         case 'DELETE' :
-            $id_medecin = $_GET['id_patient'];
+            $id_medecin = $_GET['id_medecin'];
 
             if ($id_medecin) {
-                $result = supprimerPatient($id_medecin);
+                $result = supprimerMedecin($id_medecin);
                 if ($result === true) {
                     $RETURN_CODE = 200;
                     $STATUS_MESSAGE = "Le médecin a été supprimé avec succès.";

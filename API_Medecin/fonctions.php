@@ -115,8 +115,8 @@ function modifierPatient($id_patient, $num_secu, $civilite,$nom, $prenom, $adres
     $adresse = htmlspecialchars($adresse);
     $date_naissance = htmlspecialchars($date_naissance);
     $lieu_naissance = htmlspecialchars($lieu_naissance);
-    $modifierPatient = $BD->prepare('UPDATE patient SET num_secu = ?, civilite = ?, nom = ?, prenom = ?, adresse = ?, date_naissance, lieu_naissance = ? WHERE id_patient = ?');
-    $modifierPatient-> execute(array($id_patient, $num_secu, $civilite,$nom, $prenom, $adresse, $date_naissance, $lieu_naissance));
+    $modifierPatient = $BD->prepare('UPDATE patient SET num_secu = ?, civilite = ?, nom = ?, prenom = ?, adresse = ?, date_naissance = ?, lieu_naissance = ? WHERE id_patient = ?');
+    $modifierPatient->execute(array($num_secu, $civilite, $nom, $prenom, $adresse, $date_naissance, $lieu_naissance, $id_patient));
     $BD = null;
     if($modifierPatient->rowCount() > 0) {
         return TRUE;
@@ -147,6 +147,7 @@ function unMedecin($id_medecin) {
     $UnMedecin = $BD ->prepare('SELECT * FROM medecin WHERE id_medecin = ?');
     $UnMedecin ->execute(array($id_medecin));
     $BD = null;
+    $result = [];
     foreach($UnMedecin as $row) {
         array_push($result, array('civilite' =>$row['civilite'], 'nom' =>$row['nom'], 'prenom' =>$row['prenom'],'id_utilisateur'=>$row['id_utilisateur']));
     }
@@ -208,11 +209,26 @@ function listeConsultation() {
     $listeConsultation = $BD->prepare('SELECT * from rendezvous');
     $listeConsultation -> execute(array());
     $BD = null;
-    if ($listeConsultation == null) {
-        return TRUE;
-    } else {
-        return FALSE;
+    $result = [];
+    foreach($listeConsultation as $row) {
+        array_push($result, array('Jour et Heure du rendez-vous' =>$row['dateheure_rdv'], 'Durée du Rendez-Vous' =>$row['duree_rdv'], 'id_medecin' =>$row['id_medecin'],'id_rendezvous'=>$row['id_rendezvous']));
     }
+
+    return $result;
+}
+
+function uneConsultation($id_rendezvous) {
+    $BD = connexionBD();
+    $id_rendezvous = htmlspecialchars($id_rendezvous);
+    $uneConsultation = $BD->prepare('SELECT * FROM rendezvous WHERE id_rendezvous = ?');
+    $uneConsultation -> execute(array($id_rendezvous));
+    $BD = null;
+    $result = [];
+    foreach($uneConsultation as $row) {
+        array_push($result, array('Jour et Heure du rendez-vous' =>$row['dateheure_rdv'], 'Durée du Rendez-Vous' =>$row['duree_rdv'], 'id_medecin' =>$row['id_medecin']));
+    }
+
+    return $result;
 }
 
 function AffichageConsultation($id_rendezvous) {

@@ -25,6 +25,11 @@ switch ($http_method) {
                 $RETURN_CODE = 200;
                 $STATUS_MESSAGE = "Voici le Patient :";
                 $matchingData = unPatient($_GET['nom']);
+
+                if ($matchingData === null) {
+                    throw new Exception("Aucun patient trouvé avec l'ID spécifié");
+                }
+                
             } catch (\Throwable $th) {
                 $RETURN_CODE = $th->getCode();
                 $STATUS_MESSAGE = $th->getMessage();
