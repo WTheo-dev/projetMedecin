@@ -211,7 +211,7 @@ function listeConsultation() {
     $BD = null;
     $result = [];
     foreach($listeConsultation as $row) {
-        array_push($result, array('Jour et Heure du rendez-vous' =>$row['dateheure_rdv'], 'Durée du Rendez-Vous' =>$row['duree_rdv'], 'id_medecin' =>$row['id_medecin'],'id_rendezvous'=>$row['id_rendezvous']));
+        array_push($result, array('Jour du rendez-vous' =>$row['date_rdv'],'Heure du rendez-vous' =>$row['heure_rdv'], 'Durée du Rendez-Vous' =>$row['duree_rdv'], 'id_medecin' =>$row['id_medecin'],'id_rendezvous'=>$row['id_rendezvous']));
     }
 
     return $result;
@@ -225,20 +225,21 @@ function uneConsultation($id_rendezvous) {
     $BD = null;
     $result = [];
     foreach($uneConsultation as $row) {
-        array_push($result, array('Jour et Heure du rendez-vous' =>$row['dateheure_rdv'], 'Durée du Rendez-Vous' =>$row['duree_rdv'], 'id_medecin' =>$row['id_medecin']));
+        array_push($result, array('Jour du rendez-vous' =>$row['date_rdv'],'Heure du rendez-vous' =>$row['heure_rdv'], 'Durée du Rendez-Vous' =>$row['duree_rdv'], 'id_medecin' =>$row['id_medecin']));
     }
 
     return $result;
 }
 
-function ConsultationDuJour() {
+function listeConsultationDuJour() {
     $BD = connexionBD();
-    $consultationDuJour = $BD ->prepare('SELECT * FROM rendezvous WHERE date_rdv = ?');
-    $consultationDuJour -> execute(array());
+    $dateDuJour = date('Y-m-d'); 
+    $listeConsultationDuJour = $BD->prepare('SELECT * FROM rendezvous WHERE date_rdv = ?');
+    $listeConsultationDuJour->execute(array($dateDuJour));
     $BD = null;
     $result = [];
-    foreach($consultationDuJour as $row) {
-        array_push($result, array('Jour du rendez-vous'=> $row['date_rdv'], 'Heure du rendez-vous' => $row['heure_rdv']));
+    foreach ($listeConsultationDuJour as $row) {
+        array_push($result, array('Jour du rendez-vous' => $row['date_rdv'], 'Heure du rendez-vous' => $row['heure_rdv']));
     }
     return $result;
 }
