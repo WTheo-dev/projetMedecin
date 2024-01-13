@@ -231,8 +231,16 @@ function uneConsultation($id_rendezvous) {
     return $result;
 }
 
-function AffichageConsultation($id_rendezvous) {
+function ConsultationDuJour() {
     $BD = connexionBD();
+    $consultationDuJour = $BD ->prepare('SELECT * FROM rendezvous WHERE date_rdv = ?');
+    $consultationDuJour -> execute(array());
+    $BD = null;
+    $result = [];
+    foreach($consultationDuJour as $row) {
+        array_push($result, array('Jour du rendez-vous'=> $row['date_rdv'], 'Heure du rendez-vous' => $row['heure_rdv']));
+    }
+    return $result;
 }
 
 
