@@ -258,12 +258,12 @@ function modifierMedecin($id_medecin, $civilite, $nom, $prenom)
     }
 }
 
-function MedecinExisteDeja($id_medecin)
+function MedecinExisteDeja($nom)
 {
     $BD = connexionBD();
-    $id_medecin = htmlspecialchars($id_medecin);
-    $MedecinExiste = $BD->prepare('SELECT * FROM medecin WHERE id_medecin = ?');
-    $MedecinExiste->execute(array($id_medecin));
+    $nom = htmlspecialchars($nom);
+    $MedecinExiste = $BD->prepare('SELECT * FROM medecin WHERE nom= ?');
+    $MedecinExiste->execute(array($nom));
     $BD = null;
     if ($MedecinExiste->rowCount() > 0) {
         return TRUE;
