@@ -50,9 +50,29 @@ switch ($http_method) {
     
 
     case 'POST':
+        $matchingData = null;
+        if (ajouterConsultation($data['id_patient'],$data['date_rdv'],$data['heure_rdv'],$data['duree_rdv'], $data['$id_medecin'])) {
+            $RETURN_CODE = 200;
+            $STATUS_MESSAGE = "Création du rendez-vous effectué";
+        } else {
+            $RETURN_CODE = 400;
+            $STATUS_MESSAGE = "Création impossible ou rendez-vous déjà existant";
+        }
+        deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
         break;
 
     case 'PUT':
+        $matchingData = null;
+        $id_rendezvous = $_GET['$id_rendezvous'];
+
+            if(modifierConsultation($id_rendezvous,$data['id_patient'],$data['date_rdv'],$data['heure_rdv'],$data['duree_rdv'], $data['$id_medecin'])) {
+                $RETURN_CODE = 200;
+                $STATUS_MESSAGE = "Modifications du rendez-vous effectuée.";
+            } else {
+                $RETURN_CODE = 400;
+                $STATUS_MESSAGE = "Modification du rendez-vous impossible ou rendez-vous inexistant";
+            }
+            deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
         break;
 
     case 'DELETE':

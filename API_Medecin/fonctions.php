@@ -353,11 +353,11 @@ function listeConsultationDuJour()
 
 
 
-function ajouterConsultation($id_patient, $id_rendezvous, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
+function ajouterConsultation($id_patient,$date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
 {
     $BD = connexionBD();
-    $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous(id_patient,id_rendezvous,date_rdv,heure_rdv,duree_rdv,id_medecin VALUES (?,?,?,?,?,?)');
-    $ajouterConsultation->execute(array(clean($id_patient), clean($id_rendezvous), clean($date_rdv), clean($heure_rdv), clean($duree_rdv), clean($id_medecin)));
+    $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous(id_patient,date_rdv,heure_rdv,duree_rdv,id_medecin VALUES (?,?,?,?,?)');
+    $ajouterConsultation->execute(array(clean($id_patient), clean($date_rdv), clean($heure_rdv), clean($duree_rdv), clean($id_medecin)));
     $BD = null;
     if ($ajouterConsultation == null) {
         return TRUE;
