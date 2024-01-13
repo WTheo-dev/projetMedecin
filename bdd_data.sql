@@ -15,12 +15,12 @@
     ('3333333333', 'M.', 'Li', 'Jian', '123 Bamboo Lane', '1978-11-12', 'Shanghai');
 
     -- Insertion de données de test pour la table rendezvous
-INSERT INTO rendezvous (`id_rendezvous`, `id_patient`, `date_rdv`, `heure_rdv`, `duree_rdv`, `id_medecin`) VALUES
-    (1, 1, STR_TO_DATE('15/01/2024', '%d/%m/%Y'), '10:00:00', '00:30:00', 1),
-    (2, 2, STR_TO_DATE('16/01/2024', '%d/%m/%Y'), '14:30:00','00:30:00', 2),
-    (3, 3, STR_TO_DATE('17/01/2024', '%d/%m/%Y'), '09:15:00', '00:30:00', 3),
-    (4, 4, STR_TO_DATE('18/01/2024', '%d/%m/%Y'), '11:45:00', '00:30:00', 4),
-    (5, 5, STR_TO_DATE('19/01/2024', '%d/%m/%Y'), '16:00:00', '00:30:00', 5);
+INSERT INTO rendezvous (`id_patient`, `date_rdv`, `heure_rdv`, `duree_rdv`, `id_medecin`) VALUES
+    (1, STR_TO_DATE('15/01/2024', '%d/%m/%Y'), '10:00:00', '00:30:00', 1),
+    (2, STR_TO_DATE('16/01/2024', '%d/%m/%Y'), '14:30:00','00:30:00', 2),
+    (3, STR_TO_DATE('17/01/2024', '%d/%m/%Y'), '09:15:00', '00:30:00', 3),
+    (4, STR_TO_DATE('18/01/2024', '%d/%m/%Y'), '11:45:00', '00:30:00', 4),
+    (5, STR_TO_DATE('19/01/2024', '%d/%m/%Y'), '16:00:00', '00:30:00', 5);
     INSERT INTO `role` (`id_role`,`description`) VALUES
     (1, 'Medecin'),
     (2, 'Secretaire'),

@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
 --
 
 DROP TABLE IF EXISTS `rendezvous`;
+
 CREATE TABLE IF NOT EXISTS `rendezvous` (
   `id_rendezvous` int NOT NULL AUTO_INCREMENT,
   `id_patient` int NOT NULL,
@@ -71,9 +72,11 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
   `heure_rdv` time NOT NULL,
   `duree_rdv` time DEFAULT NULL,
   `id_medecin` int NOT NULL,
-  PRIMARY KEY (`id_patient`,`id_rendezvous`),
+  PRIMARY KEY (`id_patient`, `id_rendezvous`),  
+  UNIQUE KEY `unique_id_rendezvous` (`id_rendezvous`),  
   KEY `id_medecin` (`id_medecin`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- --------------------------------------------------------
 
