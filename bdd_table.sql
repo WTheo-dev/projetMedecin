@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS `patient` (
 
 DROP TABLE IF EXISTS `rendezvous`;
 CREATE TABLE IF NOT EXISTS `rendezvous` (
-  `id_patient` int NOT NULL,
   `id_rendezvous` int NOT NULL AUTO_INCREMENT,
+  `id_patient` int NOT NULL,
   `date_rdv` date NOT NULL,
   `heure_rdv` time NOT NULL,
   `duree_rdv` time DEFAULT NULL,
