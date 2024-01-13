@@ -1,0 +1,144 @@
+header {
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+nav.menu-nav ul li.bouton{
+    list-style-type: none;
+    display: inline-block;
+    
+}
+
+nav.menu-nav li.bouton a{
+    color: white;
+    background-color: blue;
+    text-decoration: none;
+    padding: 10px;
+}
+
+nav.menu-nav ul li.bouton:hover a{
+    background-color : darkblue;
+    transition: 0.5ms all;
+}
+
+footer{
+    background-color: black;
+    color: white;
+}
+
+/* DOCUMENT */
+body  { 
+    font-family:Verdana; }
+    
+/* TABLEAU */
+
+table{
+  width:100%;
+  border-collapse: collapse;
+}
+td {
+  height: 50px; 
+  width: 50px; 
+}
+  
+/* NOM DU MOIS */
+td.nom_mois  {
+  font-size:20pt;
+  font-style:normal;
+  font-weight:normal;
+  text-align: center;
+  vertical-align: center;
+}
+  
+  /* FLECHES */
+td.flechegauche  {
+  font-size:15pt;
+  font-style:normal;
+  font-weight:normal;
+  text-align: left;
+  }
+
+  td.flechedroite {
+    font-size:15pt;
+    font-style:normal;
+    font-weight:normal;
+    text-align: right;
+    }
+  
+/* NOMS DES JOURS*/
+tr.noms_jours  {
+  width:15;
+  height:15;
+  font-size:10pt;
+  text-align: center;
+  vertical-align: center; 
+}
+  
+ /*DATES*/
+td.jours  {
+  width:15;
+  height:50;
+  border-color:rgb(211, 209, 209);
+  border-width:1px;
+  border-style:solid;
+  font-size:8pt;
+  background-color:white; 
+  text-align: left;
+  vertical-align: top; 
+}
+
+/* JOURS PRECEDENT */
+td.precedent {
+  font-size:8pt;
+  background-color: #C0C0C0; 
+  color: gray;
+  text-align: left;
+  vertical-align: top; 
+}
+  
+ /* AUJOURD'HUI */
+td.aujourdhui  {
+  width:15;
+  height:50;
+  border-color:rgb(211, 209, 209);
+  border-width:1px;
+  border-style:solid;
+  font-size:8pt;
+  background-color:rgb(111, 172, 242);
+  text-align: left;
+  vertical-align: top;  
+}
+  
+ /* CASES DES MOIS PRECEDENTS ET SUIVANTS*/
+td.cases_vides  {
+  width:15;
+  height:50;
+  border-color:#F5F5F5;
+  border-width:1px;
+  border-style:solid;
+  font-size:8pt;
+  color:#C0C0C0;}
+  
+a:link  {text-decoration:none;}
+a:visited  {text-decoration:none;}
+a:active  {text-decoration:none;}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
