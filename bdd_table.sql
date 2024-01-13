@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `medecin`;
 CREATE TABLE IF NOT EXISTS `medecin` (
-  `id_medecin` int NOT NULL,
+  `id_medecin` int NOT NULL AUTO_INCREMENT,
   `civilite` char(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `nom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `prenom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
 DROP TABLE IF EXISTS `rendezvous`;
 CREATE TABLE IF NOT EXISTS `rendezvous` (
   `id_patient` int NOT NULL,
-  `id_rendezvous` int NOT NULL,
+  `id_rendezvous` int NOT NULL AUTO_INCREMENT,
   `date_rdv` date NOT NULL,
   `heure_rdv` time NOT NULL,
   `duree_rdv` time DEFAULT NULL,
