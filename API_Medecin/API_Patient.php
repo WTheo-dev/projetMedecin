@@ -52,8 +52,25 @@ switch ($http_method) {
         }
         break;
 
-    case 'POST':
+        case 'POST':
+            $matchingData = null;
+            if (patientExisteDeja($data['num_secu'])) {
+                $RETURN_CODE = 400;
+                $STATUS_MESSAGE = "Le patient existe déjà avec le même numéro de sécurité sociale";
+            } else {
+                // Si le patient n'existe pas, ajouter le nouveau patient
+                if (ajouterPatient($data['num_secu'], $data['civilite'], $data['nom'], $data['prenom'], $data['adresse'], $data['date_naissance'], $data['lieu_naissance'])) {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Ajout du patient correctement effectué";
+                } else {
+                    $RETURN_CODE = 400;
+                    $STATUS_MESSAGE = "L'ajout du nouveau patient n'a pas pu être réalisé ou le patient existe déjà";
+                }
+            }
+        
+            deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
         break;
+        
 
     case 'PUT':
         $matchingData =  null;

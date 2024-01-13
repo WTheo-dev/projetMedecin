@@ -50,9 +50,36 @@
             }   
             break;
         
-        case 'POST':
-            // Ajouter le code pour la méthode POST
-            break;
+            case 'POST':
+                $matchingData = null;
+                if (MedecinExisteDeja($data['id_medecin'])) {
+                    $RETURN_CODE = 400;
+                    $STATUS_MESSAGE = "Le médecin existe déjà.";
+                } else {
+                    // Assurez-vous que les clés nécessaires existent dans $data
+                    if (isset($data['civilite'], $data['nom'], $data['prenom'], $data['nom_utilisateur'], $data['mdp'], $data['id_role'])) {
+                        // Appel à la fonction inscriptionApprenti
+                        if (
+                            ajouterMedecin($data['civilite'], $data['nom'], $data['prenom'], [
+                                'nom_utilisateur' => $data['nom_utilisateur'],
+                                'mdp' => $data['mdp'],
+                                'id_role' => $data['id_role']
+                            ])
+                        ) { 
+                            $RETURN_CODE = 200;
+                            $STATUS_MESSAGE = "Ajout Médecin effectué";
+                        } else {
+                            $RETURN_CODE = 400;
+                            $STATUS_MESSAGE = "Erreur lors de l'ajout du médecin";
+                        }
+                    } else {
+                        $RETURN_CODE = 400;
+                        $STATUS_MESSAGE = "Données manquantes dans la requête";
+                    }
+                }
+                // Envoi de la réponse
+                deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                break;
         
         case 'PUT' :
             $matchingData =  null;
