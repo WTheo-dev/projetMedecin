@@ -52,7 +52,7 @@
         
             case 'POST':
                 $matchingData = null;
-                if (MedecinExisteDeja($data['id_medecin'])) {
+                if (isset($data['id_medecin']) && MedecinExisteDeja($data['id_medecin'])) {              
                     $RETURN_CODE = 400;
                     $STATUS_MESSAGE = "Le médecin existe déjà.";
                 } else {

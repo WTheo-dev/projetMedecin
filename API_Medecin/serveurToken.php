@@ -15,16 +15,16 @@ switch ($methodeHTTP) {
 		try {
 			$postedData = file_get_contents('php://input');
 			$data=json_decode($postedData, true);
-			if(empty($data['login']) AND empty($data['password'])){
+			if(empty($data['nom_utilisateur']) AND empty($data['mdp'])){
 				$body = array("role" => "", "utilisateur" => "", "exp" => (time()+600));
 				$RETURN_CODE = 201;
 			}else{
-				if(identification($data['login'], $data['password'])){
+				if(identification($data['nom_utilisateur'], $data['mdp'])){
 					$RETURN_CODE = 201;
 					$duree = 2592000;
 					$body = array(
-						"role" => recuperation_role($data['login']),
-						"utilisateur" => $data['login'],
+						"role" => recuperation_role($data['nom_utilisateur']),
+						"utilisateur" => $data['nom_utilisateur'],
 						"exp" => (time() + $duree)
 					);
 				}else{
