@@ -348,7 +348,8 @@ function listeConsultationDuJour()
             $result,
             array(
                 'Date du rendez-vous' => (new DateTime($row['date_rdv']))->format('d-m-Y'),
-                'Heure du rendez-vous' => $row['heure_rdv']
+                'Heure du rendez-vous' => $row['heure_rdv'],
+                'Durée du rendez-vous' => $row['duree_rdv']
             )
         );
     }
