@@ -363,6 +363,11 @@ function listeConsultationDuJour()
 function ajouterConsultation($id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
 {
     $BD = connexionBD();
+    $id_patient = htmlspecialchars($id_patient);
+    $date_rdv = htmlspecialchars($date_rdv);
+    $heure_rdv = htmlspecialchars($heure_rdv);
+    $duree_rdv = htmlspecialchars($duree_rdv);
+    $id_medecin = htmlspecialchars($id_medecin);
     $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous (id_patient, date_rdv, heure_rdv, duree_rdv, id_medecin) VALUES (?, ?, ?, ?, ?)');
 
     // Exécution de la requête préparée
@@ -414,6 +419,10 @@ function supprimerConsulation($id_rendezvous)
 function ConsultationDejaExistante($id_medecin, $id_patient, $date_rdv, $heure_rdv)
 {
     $BD = connexionBD();
+    $id_patient = htmlspecialchars($id_patient);
+    $date_rdv = htmlspecialchars($date_rdv);
+    $heure_rdv = htmlspecialchars($heure_rdv);
+    $id_medecin = htmlspecialchars($id_medecin);
     $consultationExiste = $BD->prepare('SELECT * FROM rendezvous WHERE id_medecin = ? AND id_patient = ? AND date_rdv = ? AND heure_rdv = ?');
     $consultationExiste->execute(array($id_medecin, $id_patient, $date_rdv, $heure_rdv));
     $BD = null;
@@ -426,24 +435,9 @@ function ConsultationDejaExistante($id_medecin, $id_patient, $date_rdv, $heure_r
 }
 
 
-function filtreConsultation()
-{
-    $BD = connexionBD();
-}
-
-function ChevauchementNonOK()
-{
-    $BD = connexionBD();
-}
-
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////       GESTION DES STATISTISQUES     ////////////////////
 /////////////////////////////////////////////////////////////////////////////
-
-function tempsTotalConsultation()
-{
-    $BD = connexionBD();
-}
 
 
 /////////////////////////////////////////////////////////////////////////////
