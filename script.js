@@ -1,3 +1,34 @@
+const titre = document.querySelector(".titre");
+const medecin = document.getElementById("id_medecin");
+const URL = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php"
+
+let erreur = null;
+const erreurDiv = document.querySelector(".erreur");
+
+function getMedecin(){
+    return new Promise((resolve, reject) => {
+        fetch(`${URL}/medecins`);
+             then(data => data.json())
+            .then(medecin => {
+                console.log("medecin", medecin);
+                resolve(medecin);
+            })
+            .catch(err => {
+                reject(err);
+                erreurDiv.innerText = "Impossible de la liste de médecins";
+            })
+
+    });
+}
+
+getMedecin().then(data => {
+    console.log("Ca fonctionne");
+});
+
+
+
+
+
 function openModal(day) {
     var modalContent = document.getElementById("modalContent");
 

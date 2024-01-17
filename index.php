@@ -5,17 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabinet Médical - Accueil</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <?php include 'header.php'; ?>
+  
+<?php include 'header.php'; ?>
 
-    <?php
-require_once("calendrier.php");
+<h1 class="titre"></h1>
+<div class="erreur"></div>
 
-calendrier(date("n"),date("Y"));
+<div> 
+    <select name="medecin" id="id_medecin">
+        <option value="all"> Liste des médecins </option>
+    </select> 
+</div>
 
+
+<?php
+    require_once("calendrier.php");
+
+    calendrier(date("n"),date("Y"));
 ?>
+
 
 <div id="myModal" class="modal">
     <div class="modal-content">
