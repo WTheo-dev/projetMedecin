@@ -1,5 +1,5 @@
 const titre = document.querySelector(".titre");
-const medecin = document.getElementById("id_medecin");
+const medecinSelect = document.getElementById("id_medecin");
 const URL = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php"
 
 let erreur = null;
@@ -22,11 +22,14 @@ function getMedecin(){
 }
 
 getMedecin().then(data => {
-    console.log("Ca fonctionne");
+    let option;
+    Object.entries(data.medecin).forEach(medecins => {
+        option = document.createElement("option");
+        option.text = medecins[O];
+        option.value = medecins[1];
+        medecinSelect.add(option);
+    })
 });
-
-
-
 
 
 function openModal(day) {
