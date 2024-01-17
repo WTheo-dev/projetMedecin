@@ -23,30 +23,36 @@
             $errors[] = "Veuillez remplir tous les champs.";
         }
 
-        // Si aucune erreur, alors insérer les données
+        // Si aucune erreur, alors insérer les données dans l'API REST
         if (empty($errors)) {
             try {
-                $pdo = new PDO("mysql:host=your_host;dbname=your_database", "your_username", "your_password");
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $apiUrl = 'http://localhost/projetMedecin/API_Medecin/APIMedecin.php'; // Remplacez par l'URL de votre API
+                $apiData = array(
+                    'civilite' => $civility,
+                    'nom' => $lastName,
+                    'prenom' => $firstName,
+                    // Ajoutez d'autres clés et valeurs nécessaires pour votre API
+                );
 
-                $sql = "INSERT INTO medecin (civility, first_name, last_name)
-                        VALUES (:civility, :first_name, :last_name)";
-                
-                $stmt = $pdo->prepare($sql);
-                
-                $stmt->bindParam(':civility', $civility);
-                $stmt->bindParam(':first_name', $firstName);
-                $stmt->bindParam(':last_name', $lastName);
-                
-                $stmt->execute();
+                $ch = curl_init($apiUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($apiData));
+                curl_setopt($ch, CURLOPT_POST, 1);
 
-                echo "Médecin ajouté avec succès.";
+                $apiResponse = curl_exec($ch);
+                $apiStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
+                curl_close($ch);
+
+                // Vérifiez la réponse de l'API et affichez le message approprié
+                if ($apiStatusCode == 200) {
+                    echo "Médecin ajouté avec succès.";
+                } else {
+                    echo "Erreur lors de l'ajout du médecin via l'API. Code de statut : $apiStatusCode";
+                }
             } catch (PDOException $e) {
                 echo "Erreur : " . $e->getMessage();
             }
-
-            $pdo = null; // Fermer la connexion à la base de données
         } else {
             // Afficher les erreurs
             foreach ($errors as $error) {
