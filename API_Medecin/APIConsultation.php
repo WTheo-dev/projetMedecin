@@ -87,27 +87,27 @@ switch ($http_method) {
             deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
         break;
 
-    case 'DELETE':
-        $id_rendezvous = $_GET['id_rendezvous'];
-
+        case 'DELETE':
+            $id_rendezvous = $_GET['id_rendezvous'];
+        
             if ($id_rendezvous) {
-                $result = supprimerConsulation($id_rendezvous);
+                $result = supprimerConsultation($id_rendezvous);
                 if ($result === true) {
                     $RETURN_CODE = 200;
                     $STATUS_MESSAGE = "Le rendez-vous a été supprimé avec succès.";
                     $matchingData = null;
                 } else {
                     $RETURN_CODE = 400;
-                    $STATUS_MESSAGE = "Le rendez-vous n'existe pas ou à déjà été supprimé";
+                    $STATUS_MESSAGE = "Le rendez-vous n'existe pas ou a déjà été supprimé";
                     $matchingData = null;
                 }
             } else {
                 $RETURN_CODE = 400;
                 $STATUS_MESSAGE = "L'ID du rendez-vous est requis";
             }
-            deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
-        break;
-
+            deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+            break;
+        
     default:
         deliver_response(405, "not implemented method", null);
         break;

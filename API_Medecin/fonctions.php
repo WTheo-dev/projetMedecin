@@ -402,14 +402,14 @@ function modifierConsultation($id_rendezvous, $id_patient, $date_rdv, $heure_rdv
     }
 }
 
-function supprimerConsulation($id_rendezvous)
+function supprimerConsultation($id_rendezvous)
 {
     $BD = connexionBD();
     $id_rendezvous = htmlspecialchars($id_rendezvous);
-    $supprimerConsulation = $BD->prepare('DELETE from rendezvous WHERE id_rendezvous = ?');
-    $supprimerConsulation->execute(array($id_rendezvous));
+    $supprimerConsultation = $BD->prepare('DELETE from rendezvous WHERE id_rendezvous = ?');
+    $supprimerConsultation->execute(array($id_rendezvous));
     $BD = null;
-    if ($supprimerConsulation->rowCount() > 0) {
+    if ($supprimerConsultation->rowCount() > 0) {
         return TRUE;
     } else {
         return FALSE;
