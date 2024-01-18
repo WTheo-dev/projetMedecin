@@ -19,15 +19,27 @@
     
     switch ($http_method) {
         case 'GET':
-            if(isset($_GET['id_medecin'])) {
+            if (isset($_GET['id_medecin'])) {
                 try {
                     $RETURN_CODE = 200;
                     $STATUS_MESSAGE = "Voici le Médecin :";
                     $matchingData = unMedecin($_GET['id_medecin']);
-                    
+        
                     if ($matchingData === null) {
                         throw new Exception("Aucun médecin trouvé avec l'ID spécifié");
                     }
+                } catch (\Throwable $th) {
+                    $RETURN_CODE = $th->getCode();
+                    $STATUS_MESSAGE = $th->getMessage();
+                    $matchingData = null;
+                } finally {
+                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
+                }
+            } elseif (isset($_GET['id_medecin'])) {
+                try {
+                    $RETURN_CODE = 200;
+                    $STATUS_MESSAGE = "Voici la liste des ID Médecins :";
+                    $matchingData = listeMedecinID();
                 } catch (\Throwable $th) {
                     $RETURN_CODE = $th->getCode();
                     $STATUS_MESSAGE = $th->getMessage();
@@ -47,8 +59,9 @@
                 } finally {
                     deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
                 }
-            }   
+            }
             break;
+        
         
             case 'POST':
                 $matchingData = null;

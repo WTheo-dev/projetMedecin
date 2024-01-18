@@ -188,6 +188,20 @@ function unMedecin($id_medecin)
     return $result;
 }
 
+function listeMedecinID($id_medecin){
+    $BD= connexionBD();
+    $listeIDMedecin = $BD ->prepare('SELECT id_medecin FROM medecin');
+    $listeIDMedecin ->execute(array($id_medecin));
+    $BD = null;
+    $result =[];
+
+    foreach ($listeIDMedecin as $row) {
+        array_push($result, array('ID du Médecin' => $row['id_medecin']));
+    }
+
+    return $result;
+ }
+
 function ajouterMedecin($civilite, $nom, $prenom, $utilisateur)
 {
     try {
