@@ -1,35 +1,67 @@
 const titre = document.querySelector(".titre");
 const medecinSelect = document.getElementById("id_medecin");
-const URL = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php"
+const URL = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php";
 
-let erreur = null;
 const erreurDiv = document.querySelector(".erreur");
 
-function getMedecin(){
-    return new Promise((resolve, reject) => {
-        fetch(`${URL}/medecins`);
-             then(data => data.json())
-            .then(medecin => {
-                console.log("medecin", medecin);
-                resolve(medecin);
-            })
-            .catch(err => {
-                reject(err);
-                erreurDiv.innerText = "Impossible de la liste de médecins";
-            })
+function getMedecin() {
+    return fetch(`${URL}?id_medecin=all`)
+        .then(response => response.json())
+        .then(medecins => medecins)
+        .catch(err => {
+            erreurDiv.innerText = "Impossible de récupérer la liste des médecins";
+            throw err;
+        });
+}
 
-    });
+function updateCalendar(id_medecin) {
+    if (!id_medecin || id_medecin === "all") {
+        return;
+    }
+
+    fetch(`${URL}?id_medecin=${id_medecin}`)
+        .then(response => response.json())
+        .then(data => {
+            const modalContent = document.getElementById("modalContent");
+            modalContent.innerHTML = "";
+
+            if (data && data.length > 0) {
+                const rendezvousList = document.createElement("ul");
+
+                data.forEach(rendezvous => {
+                    const rendezvousItem = document.createElement("li");
+                    rendezvousItem.textContent = `${rendezvous.date_rdv} - ${rendezvous.heure_rdv} - ${rendezvous.nom} ${rendezvous.prenom}`;
+                    rendezvousList.appendChild(rendezvousItem);
+                });
+
+                modalContent.appendChild(rendezvousList);
+            } else {
+                modalContent.textContent = "Aucun rendez-vous pour ce médecin.";
+            }
+        })
+        .catch(error => {
+            console.error("Erreur lors de la mise à jour du calendrier :", error);
+            // Gérez l'erreur, par exemple, en affichant un message à l'utilisateur
+        });
 }
 
 getMedecin().then(data => {
     let option;
-    Object.entries(data.medecin).forEach(medecins => {
+    data.forEach(medecin => {
         option = document.createElement("option");
-        option.text = medecins[O];
-        option.value = medecins[1];
+        option.text = `${medecin.civilite} ${medecin.nom} ${medecin.prenom}`;
+        option.value = medecin.id_medecin;
         medecinSelect.add(option);
-    })
+    });
 });
+
+medecinSelect.addEventListener("change", function () {
+    const selectedMedecinId = this.value;
+    updateCalendar(selectedMedecinId);
+});
+
+
+
 
 
 function openModal(day) {
@@ -102,3 +134,39 @@ function ajouterModal() {
     function modifierModal(){
         document.getElementById("myModal").style.display ="none";
     }
+
+    function updateCalendrier(id_medecin) {
+        if (!id_medecin || id_medecin === "all") {
+            return;
+        }
+    
+        // Faites une requête AJAX pour récupérer les rendez-vous du médecin depuis le serveur (PHP)
+        fetch(`http://localhost/projetMedecin/API_Medecin/APIMedecin.php?id_medecin=${id_medecin}`)
+            .then(response => response.json())
+            .then(data => {
+                // Mettez à jour le calendrier avec les nouveaux rendez-vous
+                const modalContent = document.getElementById("modalContent");
+                modalContent.innerHTML = ""; // Efface le contenu existant
+    
+                // Ajoutez le contenu du modal avec les rendez-vous du médecin
+                if (data && data.length > 0) {
+                    const rendezvousList = document.createElement("ul");
+    
+                    data.forEach(rendezvous => {
+                        const rendezvousItem = document.createElement("li");
+                        rendezvousItem.textContent = `${rendezvous.date_rdv} - ${rendezvous.heure_rdv} - ${rendezvous.nom} ${rendezvous.prenom}`;
+                        rendezvousList.appendChild(rendezvousItem);
+                    });
+    
+                    modalContent.appendChild(rendezvousList);
+                } else {
+                    modalContent.textContent = "Aucun rendez-vous pour ce médecin.";
+                }
+            })
+            .catch(error => {
+                console.error("Erreur lors de la mise à jour du calendrier :", error);
+                // Gérez l'erreur, par exemple, en affichant un message à l'utilisateur
+            });
+    }
+    
+    
