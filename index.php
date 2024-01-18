@@ -9,7 +9,16 @@
 </head>
 <body>
   
-<?php include 'header.php'; ?>
+<?php 
+session_start(); // Démarrer la session
+
+// Vérifier si le token est présent dans la session
+if (isset($_SESSION['token'])) {
+    $token = $_SESSION['token'];
+}
+
+include 'header.php';
+?>
 
 <h1 class="titre"></h1>
 <div class="erreur"></div>
@@ -20,13 +29,10 @@
     </select> 
 </div>
 
-
 <?php
-    require_once("calendrier.php");
-
-    calendrier(date("n"),date("Y"));
+require_once("calendrier.php");
+calendrier(date("n"),date("Y"));
 ?>
-
 
 <div id="myModal" class="modal">
     <div class="modal-content">
@@ -40,6 +46,3 @@
 
 </body>
 </html>
-
-
-

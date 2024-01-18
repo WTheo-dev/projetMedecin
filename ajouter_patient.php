@@ -7,65 +7,40 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php include 'header.php'; ?>
 
 <?php
+// Inclure la session PHP
+session_start();
+
+// Inclure le fichier fonctions.php
+include './API_Medecin/fonctions.php';
+
+// Inclure le fichier d'en-tête
+include 'header.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Récupérer les données du formulaire
-    $civility = isset($_POST["civility"]) ? $_POST["civility"] : '';
-    $firstName = $_POST["first_name"];
-    $lastName = $_POST["last_name"];
-    $address = $_POST["address"];
-    $birthDate = $_POST["birth_date"];
-    $birthPlace = $_POST["birth_place"];
-    $socialSecurityNumber = $_POST["social_security_number"];
-    $doctorId = $_POST["medecin_id"]; // Nouveau champ pour le médecin référent
+    // Traitement du formulaire lors de la soumission POST
+    if (isset($_SESSION['token'])) {
+        $token = $_SESSION['token'];
 
-    // Initialiser un tableau pour stocker les erreurs
-    $errors = array();
+        // Récupérer les données du formulaire
+        $civilite = $_POST['civilite'];
+        $prenom = $_POST['prenom'];
+        $nom = $_POST['nom'];
+        $adresse = $_POST['adresse'];
+        $date_naissance = $_POST['date_naissance'];
+        $lieu_naissance = $_POST['lieu_naissance'];
+        $num_secu = $_POST['num_secu'];
+        $id_medecin = $_POST['id_medecin'];
 
-    // Valider les données
-    if (empty($civility) || empty($firstName) || empty($lastName) || empty($address) || empty($birthDate) || empty($birthPlace) || empty($socialSecurityNumber) || empty($medecinId)) {
-        $errors[] = "Veuillez remplir tous les champs.";
-    }
-
-    if (!is_numeric($socialSecurityNumber) || strlen($socialSecurityNumber) !== 14) {
-        $errors[] = "Le numéro de sécurité sociale doit comporter exactement 14 chiffres et être composé uniquement de chiffres.";
-    }
-
-    // Si aucune erreur, alors insérer les données
-    if (empty($errors)) {
         try {
-            $pdo = new PDO("mysql:host=your_host;dbname=your_database", "your_username", "your_password");
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Appeler la fonction de création de patient
+            $response = ajouterPatient($civilite, $prenom, $nom, $adresse, $date_naissance, $lieu_naissance, $num_secu);
 
-            $sql = "INSERT INTO patients (civility, first_name, last_name, address, birth_date, birth_place, social_security_number, medecin_id)
-                    VALUES (:civility, :first_name, :last_name, :address, :birth_date, :birth_place, :social_security_number, :medecin_id)";
-            
-            $stmt = $pdo->prepare($sql);
-            
-            $stmt->bindParam(':civility', $civility);
-            $stmt->bindParam(':first_name', $firstName);
-            $stmt->bindParam(':last_name', $lastName);
-            $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':birth_date', $birthDate);
-            $stmt->bindParam(':birth_place', $birthPlace);
-            $stmt->bindParam(':social_security_number', $socialSecurityNumber);
-            $stmt->bindParam(':medecin_id', $medecinId);
-            
-            $stmt->execute();
-
-            echo "Fiche patient créée avec succès.";
-
-        } catch (PDOException $e) {
+            // Gérer la réponse de la fonction (peut être un message de succès ou d'erreur)
+            echo $response;
+        } catch (Exception $e) {
             echo "Erreur : " . $e->getMessage();
-        }
-
-        $pdo = null; // Fermer la connexion à la base de données
-    } else {
-        // Afficher les erreurs
-        foreach ($errors as $error) {
-            echo $error . "<br>";
         }
     }
 }

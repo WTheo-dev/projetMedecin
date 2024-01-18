@@ -1,9 +1,15 @@
-<?php 
-  session_start();
-  include_once('server.php');
-  if (isset($_POST['nom_utilisateur']) && isset($_POST['mdp'])) {
-    connexion($_POST['nom_utilisateur'],$_POST['mdp']);
-  }
+<?php
+session_start();
+include_once('server.php');
+
+// Si le formulaire de connexion est soumis
+if (isset($_POST['nom_utilisateur']) && isset($_POST['mdp'])) {
+    // Connexion et création du token
+    connexion($_POST['nom_utilisateur'], $_POST['mdp']);
+} else {
+    // Affiche un message d'erreur si les champs ne sont pas définis
+    echo "Veuillez remplir tous les champs du formulaire.";
+}
 ?>
 
 <!DOCTYPE html>
