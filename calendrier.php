@@ -1,6 +1,9 @@
 <?php
+
+require_once "API_Medecin/fonctions.php";
+
 //FONCTION PRINCIPALE DU CALENDRIER
-function calendrier($m_donne,$a_donne){
+function calendrier($m_donne,$a_donne, $id_medecin, $id_patient, $heure_rdv){
     include("mois_semaines.php");
     
     
@@ -54,7 +57,8 @@ function calendrier($m_donne,$a_donne){
                 echo "<td class=\"precedent\" onclick=\"openModal('$jour-$m-$a')\">$jour</td>";
             } else {
                 // Sinon, afficher le jour normalement
-                echo "<td class=\"jours\" onclick=\"openModal('$jour-$m-$a')\">$jour</td>";
+                $jour_date = "$jour-$m-$a";
+                echo "<td class=\"jours" . (ConsultationDejaExistante($id_medecin, $id_patient, $jour_date, $heure_rdv) ? " rendezvous-existants" : "") . "\" onclick=\"openModal('$jour_date')\">$jour</td>";
             }
             $jour++;    //On passe au lendemain ^^
         

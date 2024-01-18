@@ -23,15 +23,28 @@ include 'header.php';
 <h1 class="titre"></h1>
 <div class="erreur"></div>
 
-<div> 
-    <select name="medecin" id="id_medecin">
-        <option value="all"> Liste des médecins </option>
-    </select> 
-</div>
+<?php
+
+require_once "API_Medecin/fonctions.php";
+$medecins = listeMedecin();
+
+echo '<div>';
+echo '<select name="medecin" id="id_medecin">';
+echo '<option value="all"> Liste des médecins </option>';
+
+foreach ($medecins as $medecin) {
+    echo '<option value="' . $medecin['id_medecin'] . '">';
+    echo $medecin['civilite'] . ' ' . $medecin['nom'] . ' ' . $medecin['prenom'];
+    echo '</option>';
+}
+
+echo '</select>';
+echo '</div>';
+?>
 
 <?php
 require_once("calendrier.php");
-calendrier(date("n"),date("Y"));
+calendrier(date("n"), date("Y"), $id_medecin, $id_patient, $heure_rdv);
 ?>
 
 <div id="myModal" class="modal">
