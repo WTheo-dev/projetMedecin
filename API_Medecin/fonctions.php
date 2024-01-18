@@ -19,22 +19,6 @@ function connexionBD()
     return $BD;
 }
 
-function identification($nom_utilisateur, $mdp)
-{
-    $BD = connexionBD();
-    $nom_utilisateur = htmlspecialchars($nom_utilisateur);
-    $mdp = htmlspecialchars($mdp);
-
-    $verificationMembre = $BD->prepare('SELECT * FROM utilisateur WHERE nom_utilisateur = ? AND mdp = ?');
-    $verificationMembre->execute(array($nom_utilisateur, $mdp));
-    $BD = null;
-    if ($verificationMembre->rowCount() > 0) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
 function recuperation_role($nom_utilisateur)
 {
     $BD = connexionBD();
@@ -187,6 +171,20 @@ function unMedecin($id_medecin)
 
     return $result;
 }
+
+function listeMedecinID($id_medecin){
+    $BD= connexionBD();
+    $listeIDMedecin = $BD ->prepare('SELECT id_medecin FROM medecin');
+    $listeIDMedecin ->execute(array($id_medecin));
+    $BD = null;
+    $result =[];
+
+    foreach ($listeIDMedecin as $row) {
+        array_push($result, array('ID du Médecin' => $row['id_medecin']));
+    }
+
+    return $result;
+ }
 
 function ajouterMedecin($civilite, $nom, $prenom, $utilisateur)
 {

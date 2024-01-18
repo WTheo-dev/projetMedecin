@@ -11,7 +11,6 @@ if (isset($_POST['nom_utilisateur']) && isset($_POST['mdp'])) {
     echo "Veuillez remplir tous les champs du formulaire.";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -37,3 +36,5 @@ if (isset($_POST['nom_utilisateur']) && isset($_POST['mdp'])) {
 
 </body>
 </html>
+
+

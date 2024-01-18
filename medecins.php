@@ -7,48 +7,67 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'header.php'; 
+        include_once './API_Medecin/fonctions.php';?>
     <h2>Liste des Médecins</h2>
 
     <?php
-    // Connexion à la base de données
-    try {
-        $pdo = new PDO("mysql:host=your_host;dbname=your_database", "your_username", "your_password");
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Vérifier si le token est présent dans la session
+    if (isset($_SESSION['token'])) {
+        $token = $_SESSION['token'];
 
-        // Requête SQL pour sélectionner tous les médecins
-        $sql = "SELECT * FROM medecin";
-        $stmt = $pdo->query($sql);
-
-        // Vérifier s'il y a des résultats
-        if ($stmt->rowCount() > 0) {
-            // Afficher la liste des médecins dans un tableau
-            echo "<a href='ajouter_medecin.php'><button>Ajouter un médecin</button></a>";
-            echo "<table border='1'>";
-            echo "<tr><th>Nom</th><th>Prénom</th><th>Actions</th></tr>";
+        try {
+            // Utilisez le token dans votre API pour récupérer la liste des medecins
+            $api_url = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php";
             
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo "<tr>";
-                echo "<td>" . $row['last_name'] . "</td>";
-                echo "<td>" . $row['first_name'] . "</td>";
-                echo "<td>
-                        <a href='modifier_medecin.php?id=" . $row['medecin_id'] . "'>Modifier</a>
-                        <a href='supprimer_medecin.php?id=" . $row['medecin_id'] . "'>Supprimer</a>
-                      </td>";
-                echo "</tr>";
+
+            $options = [
+                'http' => [
+                    'method' => 'GET',
+                    'header' => 'Authorization: Medecin ' . $token,
+                ],
+            ];
+
+            $context = stream_context_create($options);
+            $response = file_get_contents($api_url, false, $context);
+
+            // Vérifier s'il y a des résultats dans la réponse de l'API
+            $data = json_decode($response, true);
+
+            if (isset($data['data']) && !empty($data['data'])) {
+                // Afficher la liste des medecins dans un tableau
+                
+
+                echo "<table border='1'>";
+                echo "<tr><th>Civilité</th><th>Nom</th><th>Prénom</th><th>ID Médecin</th><th>Actions</th></tr>";
+                
+                foreach ($data['data'] as $medecin) {
+                    echo "<tr>";
+                    echo "<td>" . $medecin['civilie'] . "</td>";
+                    echo "<td>" . $medecin['nom'] . "</td>";
+                    echo "<td>" . $medecin['prenom'] . "</td>";
+                    echo "<td>" . $medecin['id_medecin'] . "</td>";
+                    echo "<td>
+                            <a href='modifier_medecin.php?id=" . $medecin['id_medecin'] . "'>Modifier</a>
+                            <a href='supprimer_medecin.php?id=" . $medecin['id_medecin'] . "'>Supprimer</a>
+                          </td>";
+                    echo "</tr>";
+                }
+                
+                echo "</table>";
+            } else {
+                echo "Aucun medecin trouvé.";
             }
-            
-            echo "</table>";
-        } else {
-            echo "Aucun médecin trouvé.";
+            echo "<a href='ajouter_medecin.php'><button>Ajouter un medecin</button></a>";
+
+        } catch (Exception $e) {
+            echo "Erreur : " . $e->getMessage();
         }
-
-    } catch (PDOException $e) {
-        echo "Erreur : " . $e->getMessage();
+    } else {
+        // Rediriger vers la page de connexion si le token n'est pas présent
+        header('Location: connexion.php');
+        exit();
     }
-
-    // Fermer la connexion à la base de données
-    $pdo = null;
     ?>
 </body>
 </html>
