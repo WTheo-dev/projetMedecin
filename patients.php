@@ -21,7 +21,7 @@
 
         try {
             // Utilisez le token dans votre API pour récupérer la liste des patients
-            $api_url = "http://localhost/projetMedecin/API_Medecin/API_Medecin.php";
+            $api_url = "http://localhost/projetMedecin/API_Medecin/API_Patient.php";
             
 
             $options = [
