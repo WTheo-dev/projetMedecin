@@ -1,32 +1,65 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
 header {
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
+  background-color: black;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-nav.menu-nav ul li.bouton{
-    list-style-type: none;
-    display: inline-block;
-    
+header h1 {
+  flex: 1; 
 }
 
-nav.menu-nav li.bouton a{
-    color: white;
-    background-color: blue;
-    text-decoration: none;
-    padding: 10px;
+nav.menu-nav {
+  text-align: center;
 }
 
-nav.menu-nav ul li.bouton:hover a{
-    background-color : darkblue;
-    transition: 0.5ms all;
+nav.menu-nav ul {
+  padding: 0;
 }
 
-footer{
-    background-color: black;
-    color: white;
+nav.menu-nav ul li.bouton {
+  list-style-type: none;
+  display: inline-block;
 }
+
+nav.menu-nav li.bouton a {
+  color: white;
+  background-color: blue;
+  text-decoration: none;
+  padding: 10px;
+}
+
+nav.menu-nav ul li.bouton:hover a {
+  background-color: darkblue;
+  transition: 0.5s all;
+}
+
+.logout-button {
+  color: white;
+  background-color: red;
+  text-decoration: none;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.logout-button:hover {
+  background-color: darkred;
+  transition: 0.5s all;
+}
+
+footer {
+  background-color: black;
+  color: white;
+}
+
+
 
 /* DOCUMENT */
 body  { 
@@ -148,56 +181,62 @@ a:active  {text-decoration:none;}
 /* CONNEXION */
 
 .body-connexion {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column; /* Permet au contenu d'être empilé verticalement */
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-        }
-
-  .h1-connexion {
-      margin-top: 0;
-      margin-bottom: 20px;
-  }
-
-  .form-connexion {
-     background-color: #fff;
-     border-radius: 8px;
-     padding: 20px;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-     width: 300px;
-     text-align: center;
-  }
-
-  .label-connexion {
-     display: block;
-     margin-bottom: 8px;
-     font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f7f7; /* Légère modification de la couleur de fond */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-  .input-connexion {
-     width: 100%;
-     padding: 8px;
-     margin-bottom: 12px;
-     box-sizing: border-box;
-     border: 1px solid #ccc;
-     border-radius: 4px;
+.h1-connexion {
+  margin-top: 20px; /* Légère modification de la marge supérieure */
+  margin-bottom: 20px;
+  font-size: 28px; /* Ajustement de la taille de la police */
+  color: #333; /* Couleur de la police légèrement assombrie */
 }
 
-  .connexion-button {
-      background-color: #4caf50;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-  }
+.form-connexion {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Légère augmentation de l'ombre */
+  width: 320px; /* Légère augmentation de la largeur */
+  text-align: center;
+}
 
-   .connexion-button:hover {
-      background-color: #45a049;
-  }
+.label-connexion {
+  display: block;
+  margin-bottom: 10px; /* Légère modification de la marge inférieure */
+  font-weight: bold;
+}
+
+.input-connexion {
+  width: calc(100% - 16px); /* Ajustement de la largeur avec box-sizing */
+  padding: 10px;
+  margin-bottom: 16px; /* Légère augmentation de la marge inférieure */
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px; /* Légère augmentation du rayon de la bordure */
+}
+
+.connexion-button {
+  background-color: #3498db; /* Couleur de fond modifiée */
+  color: #fff;
+  padding: 12px; /* Légère augmentation du rembourrage */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px; /* Ajustement de la taille de la police */
+}
+
+.connexion-button:hover {
+  background-color: #2980b9; /* Légère modification de la couleur au survol */
+}
+
+
+/* AJOUT PATIENT */

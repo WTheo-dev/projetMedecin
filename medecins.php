@@ -7,17 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php include 'header.php'; 
-        include_once './API_Medecin/fonctions.php';?>
+    <?php 
+    session_start(); // Démarrer la session
+    include 'header.php'; 
+    ?>
     <h2>Liste des Médecins</h2>
 
     <?php
     // Vérifier si le token est présent dans la session
-    if (isset($_SESSION['token'])) {
-        $token = $_SESSION['token'];
+    if (isset($_SESSION['jwt_token'])) {
+        $token = $_SESSION['jwt_token'];
 
         try {
-            // Utilisez le token dans votre API pour récupérer la liste des medecins
+            // Utilisez le token dans votre API pour récupérer la liste des médecins
             $api_url = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php";
             
 
@@ -35,15 +37,15 @@
             $data = json_decode($response, true);
 
             if (isset($data['data']) && !empty($data['data'])) {
-                // Afficher la liste des medecins dans un tableau
+                // Afficher la liste des médecins dans un tableau
                 
 
                 echo "<table border='1'>";
-                echo "<tr><th>Civilité</th><th>Nom</th><th>Prénom</th><th>ID Médecin</th><th>Actions</th></tr>";
+                echo "<tr><th>Civilité</th><th>Nom</th><th>Prénom</th><th>ID medecin</th><th>Actions</th></tr>";
                 
                 foreach ($data['data'] as $medecin) {
                     echo "<tr>";
-                    echo "<td>" . $medecin['civilie'] . "</td>";
+                    echo "<td>" . $medecin['civilite'] . "</td>";
                     echo "<td>" . $medecin['nom'] . "</td>";
                     echo "<td>" . $medecin['prenom'] . "</td>";
                     echo "<td>" . $medecin['id_medecin'] . "</td>";

@@ -7,74 +7,55 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
     <?php include 'header.php'; ?>
 
     <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Récupérer les données du formulaire
-        $civility = isset($_POST["civility"]) ? $_POST["civility"] : '';
-        $firstName = $_POST["first_name"];
-        $lastName = $_POST["last_name"];
+    session_start();
+    if (isset($_SESSION['jwt_token'])) {
+        $token = $_SESSION['jwt_token'];
+        try {
+            $api_url = "http://localhost/projetMedecin/API_Medecin/APIMedecin.php";
+            
+            $options = [
+                'http' => [
+                    'method' => 'POST',
+                    'header' => 'Authorization: Medecin ' . $token,
+                ],
+            ];
 
-        // Valider les données
-        $errors = array();
+            $context = stream_context_create($options);
+            $response = file_get_contents($api_url, false, $context);
 
-        if (empty($civility) || empty($firstName) || empty($lastName)) {
-            $errors[] = "Veuillez remplir tous les champs.";
+            $data = json_decode($response, true);
         }
-
-        // Si aucune erreur, alors insérer les données dans l'API REST
-        if (empty($errors)) {
-            try {
-                $apiUrl = 'http://localhost/projetMedecin/API_Medecin/APIMedecin.php'; // Remplacez par l'URL de votre API
-                $apiData = array(
-                    'civilite' => $civility,
-                    'nom' => $lastName,
-                    'prenom' => $firstName,
-                    // Ajoutez d'autres clés et valeurs nécessaires pour votre API
-                );
-
-                $ch = curl_init($apiUrl);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($apiData));
-                curl_setopt($ch, CURLOPT_POST, 1);
-
-                $apiResponse = curl_exec($ch);
-                $apiStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-                curl_close($ch);
-
-                // Vérifiez la réponse de l'API et affichez le message approprié
-                if ($apiStatusCode == 200) {
-                    echo "Médecin ajouté avec succès.";
-                } else {
-                    echo "Erreur lors de l'ajout du médecin via l'API. Code de statut : $apiStatusCode";
-                }
-            } catch (PDOException $e) {
-                echo "Erreur : " . $e->getMessage();
-            }
-        } else {
-            // Afficher les erreurs
-            foreach ($errors as $error) {
-                echo $error . "<br>";
-            }
+        catch (Exception $e) {
+            // Handle exceptions if any
+            echo 'Error: ' . $e->getMessage();
         }
+    } else {
+        header('Location: connexion.php');
+        exit();
     }
     ?>
 
     <h2>Ajouter Médecin</h2>
 
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form method="POST" action="./API_Medecin/AjouterMedecin.php">
         Civilité:
-        <input type="radio" name="civility" value="M" id="civility_m" checked>
-        <label for="civility_m">M</label>
+        <input type="radio" name="civilite" value="M" id="civilite_m" checked>
+        <label for="civilite_m">M</label>
         
-        <input type="radio" name="civility" value="Mme" id="civility_mme">
-        <label for="civility_mme">Mme</label>
+        <input type="radio" name="civilite" value="Mme" id="civilite_mme">
+        <label for="civilite_mme">Mme</label>
         <br>
 
-        Prénom: <input type="text" name="first_name"><br>
-        Nom: <input type="text" name="last_name"><br>
+        Prénom: <input type="text" name="prenom" required><br>
+        Nom: <input type="text" name="nom" required><br>
+        Nom d'utilisateur: <input type="text" name="nom_utilisateur" required><br>
+        Mot de Passe: <input type="password" name="mdp"required><br>
+        Rôle: <input type="number" name="id_role" min="1" max="2" required><br>
+
 
         <input type="submit" value="Ajouter Médecin">
     </form>

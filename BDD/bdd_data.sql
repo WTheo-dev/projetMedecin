@@ -23,8 +23,7 @@ INSERT INTO rendezvous (`id_patient`, `date_rdv`, `heure_rdv`, `duree_rdv`, `id_
     (5, STR_TO_DATE('19/01/2024', '%d/%m/%Y'), '16:00:00', '00:30:00', 5);
     INSERT INTO `role` (`id_role`,`description`) VALUES
     (1, 'Medecin'),
-    (2, 'Secretaire'),
-    (3, 'Patient');
+    (2, 'Secretaire');
     
     INSERT INTO `utilisateur` (`id_utilisateur`,`nom_utilisateur`,`mdp`, `id_role`) VALUES 
     (1, 'utilisateur1', 'motdepasse1', 3),

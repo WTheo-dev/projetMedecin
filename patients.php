@@ -16,8 +16,8 @@
 
     <?php
     // Vérifier si le token est présent dans la session
-    if (isset($_SESSION['token'])) {
-        $token = $_SESSION['token'];
+    if (isset($_SESSION['jwt_token'])) {
+        $token = $_SESSION['jwt_token'];
 
         try {
             // Utilisez le token dans votre API pour récupérer la liste des patients
@@ -63,7 +63,6 @@
                 echo "Aucun patient trouvé.";
             }
             echo "<a href='ajouter_patient.php'><button>Ajouter un patient</button></a>";
-            echo "<a href='logout.php'><button>Déconnexion</button></a>";
 
         } catch (Exception $e) {
             echo "Erreur : " . $e->getMessage();

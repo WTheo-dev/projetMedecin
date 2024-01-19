@@ -19,6 +19,24 @@ function connexionBD()
     return $BD;
 }
 
+
+function identification($nom_utilisateur, $mdp)
+{
+    $BD = connexionBD();
+    $nom_utilisateur = htmlspecialchars($nom_utilisateur);
+    $mdp = htmlspecialchars($mdp);
+
+    $verificationMembre = $BD->prepare('SELECT * FROM utilisateur WHERE nom_utilisateur = ? AND mdp = ?');
+    $verificationMembre->execute(array($nom_utilisateur, $mdp));
+    $BD = null;
+    if ($verificationMembre->rowCount() > 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+
 function recuperation_role($nom_utilisateur)
 {
     $BD = connexionBD();
@@ -474,4 +492,3 @@ function action_permited(): void
         throw new ExceptionIssuficiantPermission();
     }
 }
-?>

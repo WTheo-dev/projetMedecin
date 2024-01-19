@@ -35,18 +35,6 @@
                 } finally {
                     deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
                 }
-            } elseif (isset($_GET['id_medecin'])) {
-                try {
-                    $RETURN_CODE = 200;
-                    $STATUS_MESSAGE = "Voici la liste des ID Médecins :";
-                    $matchingData = listeMedecinID();
-                } catch (\Throwable $th) {
-                    $RETURN_CODE = $th->getCode();
-                    $STATUS_MESSAGE = $th->getMessage();
-                    $matchingData = null;
-                } finally {
-                    deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
-                }
             } else {
                 try {
                     $RETURN_CODE = 200;
@@ -129,4 +117,4 @@
             break;
         
     }
-?>
+
