@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabinet Médical - Médecins</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="medecins.css">
 </head>
 <body>
     <?php 
@@ -38,7 +38,7 @@
 
             if (isset($data['data']) && !empty($data['data'])) {
                 // Afficher la liste des médecins dans un tableau
-                
+                echo "<a href='ajouter_medecin.php'><button>Ajouter un medecin</button></a>";
 
                 echo "<table border='1'>";
                 echo "<tr><th>Civilité</th><th>Nom</th><th>Prénom</th><th>ID medecin</th><th>Actions</th></tr>";
@@ -60,7 +60,7 @@
             } else {
                 echo "Aucun medecin trouvé.";
             }
-            echo "<a href='ajouter_medecin.php'><button>Ajouter un medecin</button></a>";
+         
 
         } catch (Exception $e) {
             echo "Erreur : " . $e->getMessage();

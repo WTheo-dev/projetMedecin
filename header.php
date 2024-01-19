@@ -1,38 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Cabinet Médical</title>
+    <link rel="stylesheet" href="header.css">
+    
 </head>
-
-<body>
     <header>
+        <img src="icon_medecin.png" alt="icon medecin">
         <h1>Cabinet Médical</h1>
-        <a class="logout-button" href="logout.php">Déconnexion</a>
     </header>
 
-    <nav class="menu-nav">
-        <ul>
-            <li class="bouton">
-                <a href="index.php">Accueil</a>
-            </li>
-
-            <li class="bouton">
-                <a href="patients.php">Patients</a>
-            </li>
-
-            <li class="bouton">
-                <a href="medecins.php">Médecins</a>
-            </li>
-
-            <li class="bouton">
-                <a href="statistique.php">Statistiques</a>
-            </li>
-        </ul>
+    <nav>
+        <a href="index.php">Accueil</a>
+        <a href="patients.php">Patients</a>
+        <a href="medecins.php">Médecins</a>
+        <a href="statistique.php">Statistiques</a>
+        <a href="logout.php">Se déconnecter</a>
     </nav>
-</body>
-
 </html>

@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabinet Médical - Patients</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="patients.css">
 </head>
 <body>
     <?php 
     session_start(); // Démarrer la session
-    include_once('./API_Medecin/fonctions.php');
     include 'header.php'; 
     ?>
     <h2>Liste des Patients</h2>
@@ -39,7 +38,7 @@
 
             if (isset($data['data']) && !empty($data['data'])) {
                 // Afficher la liste des patients dans un tableau
-                
+                echo "<a href='ajouter_patient.php'><button>Ajouter un patient</button></a>";
 
                 echo "<table border='1'>";
                 echo "<tr><th>Civilité</th><th>Nom</th><th>Prénom</th><th>Adresse</th><th>ID Patient</th><th>Actions</th></tr>";
@@ -62,7 +61,7 @@
             } else {
                 echo "Aucun patient trouvé.";
             }
-            echo "<a href='ajouter_patient.php'><button>Ajouter un patient</button></a>";
+           
 
         } catch (Exception $e) {
             echo "Erreur : " . $e->getMessage();

@@ -11,11 +11,10 @@
 
 <body>
 
-    <?php include 'header.php';
-    ?>
-    <?php
+    <?php 
     session_start(); // Démarrer la session
-    
+    include 'header.php'; 
+
     // Vérifier si le token est présent dans la session
     if (isset($_SESSION['jwt_token'])) {
         $token = $_SESSION['jwt_token'];
