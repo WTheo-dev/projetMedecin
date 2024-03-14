@@ -23,11 +23,11 @@ switch ($http_method) {
         if (isset($_GET['nom'])) {
             try {
                 $RETURN_CODE = 200;
-                $STATUS_MESSAGE = "Voici le Patient :";
-                $matchingData = unPatient($_GET['nom']);
+                $STATUS_MESSAGE = "Voici l'usager :";
+                $matchingData = unUsager($_GET['nom']);
 
                 if ($matchingData === null) {
-                    throw new Exception("Aucun patient trouvé avec l'ID spécifié");
+                    throw new Exception("Aucun usager trouvé avec l'ID spécifié");
                 }
                 
             } catch (\Throwable $th) {
@@ -40,8 +40,8 @@ switch ($http_method) {
         } else {
             try {
                 $RETURN_CODE = 200;
-                $STATUS_MESSAGE = "Voici la liste des Patients :";
-                $matchingData = listePatient();
+                $STATUS_MESSAGE = "Voici la liste des usagers :";
+                $matchingData = listeUsager();
             } catch (\Throwable $th) {
                 $RETURN_CODE = $th->getCode();
                 $STATUS_MESSAGE = $th->getMessage();
@@ -54,17 +54,17 @@ switch ($http_method) {
 
         case 'POST':
             $matchingData = null;
-            if (patientExisteDeja($data['num_secu'])) {
+            if (UsagerExisteDeja($data['num_secu'])) {
                 $RETURN_CODE = 400;
-                $STATUS_MESSAGE = "Le patient existe déjà avec le même numéro de sécurité sociale";
+                $STATUS_MESSAGE = "L'usager existe déjà avec le même numéro de sécurité sociale";
             } else {
-                // Si le patient n'existe pas, ajouter le nouveau patient
-                if (ajouterPatient($data['num_secu'], $data['civilite'], $data['nom'], $data['prenom'], $data['adresse'], $data['date_naissance'], $data['lieu_naissance'])) {
+                // Si l'usager n'existe pas, ajouter le nouveau usager
+                if (ajouterUsager($data['civilite'], $data['nom'], $data['prenom'], $data['sexe'], $data['adresse'], $data['code_postal'], $data['ville'], $data['date_nais'], $data['lieu_nais'], $data['num_secu'])) {
                     $RETURN_CODE = 200;
-                    $STATUS_MESSAGE = "Ajout du patient correctement effectué";
+                    $STATUS_MESSAGE = "Ajout de l'usager correctement effectué";
                 } else {
                     $RETURN_CODE = 400;
-                    $STATUS_MESSAGE = "L'ajout du nouveau patient n'a pas pu être réalisé ou le patient existe déjà";
+                    $STATUS_MESSAGE = "L'ajout du nouveau usager n'a pas pu être réalisé ou l'usager existe déjà";
                 }
             }
         
@@ -74,34 +74,34 @@ switch ($http_method) {
 
     case 'PUT':
         $matchingData =  null;
-        $id_patient = $_GET['id_patient'];
-        if(modifierPatient($id_patient,$data['num_secu'],$data['civilite'],$data['nom'],$data['prenom'],$data['adresse'],$data['date_naissance'],$data['lieu_naissance'])) {
+        $id_usager = $_GET['id_usager'];
+        if(modifierUsager($id_usager,$data['civilite'], $data['nom'], $data['prenom'], $data['sexe'], $data['adresse'], $data['code_postal'], $data['ville'], $data['date_nais'], $data['lieu_nais'], $data['num_secu'])) {
             $RETURN_CODE = 200;
-            $STATUS_MESSAGE = "Mise à jour du Patient effectuée";
+            $STATUS_MESSAGE = "Mise à jour de l'usager effectué";
         } else {
             $RETURN_CODE = 400;
-            $STATUS_MESSAGE = "Erreur de syntaxe ou id_patient invalide";
+            $STATUS_MESSAGE = "Erreur de syntaxe ou id_usager invalide";
         }
         deliver_response($RETURN_CODE,$STATUS_MESSAGE,$matchingData);
         break;
 
     case 'DELETE':
-        $id_patient = $_GET['id_patient'];
+        $id_usager = $_GET['id_usager'];
 
-        if ($id_patient) {
-            $result = supprimerPatient($id_patient);
+        if ($id_usager) {
+            $result = supprimerUsager($id_usager);
             if ($result === true) {
                 $RETURN_CODE = 200;
-                $STATUS_MESSAGE = "Le Patient a été supprimé avec succès.";
+                $STATUS_MESSAGE = "L'usager a été supprimé avec succès.";
                 $matchingData = null;
             } else {
                 $RETURN_CODE = 400;
-                $STATUS_MESSAGE = "Le Patient n'existe pas ou à déjà été supprimé";
+                $STATUS_MESSAGE = "L'usager n'existe pas ou à déjà été supprimé";
                 $matchingData = null;
             }
         } else {
             $RETURN_CODE = 400;
-            $STATUS_MESSAGE = "L'ID du patient est requis";
+            $STATUS_MESSAGE = "L'ID de l'usager est requis";
         }
         deliver_response($RETURN_CODE, $STATUS_MESSAGE, $matchingData);
         break;
