@@ -3,7 +3,7 @@
 require_once("./CabMed/fonctions.php");
 
 //FONCTION PRINCIPALE DU CALENDRIER
-function calendrier($m_donne,$a_donne, $id_medecin, $id_patient, $heure_rdv){
+function calendrier($m_donne,$a_donne, $id_medecin, $id_patient, $heure_consult){
     include("mois_semaines.php");
     
     
@@ -58,7 +58,7 @@ function calendrier($m_donne,$a_donne, $id_medecin, $id_patient, $heure_rdv){
             } else {
                 // Sinon, afficher le jour normalement
                 $jour_date = "$jour-$m-$a";
-                echo "<td class=\"jours" . (ConsultationDejaExistante($id_medecin, $id_patient, $jour_date, $heure_rdv) ? " rendezvous-existants" : "") . "\" onclick=\"openModal('$jour_date')\">$jour</td>";
+                echo "<td class=\"jours" . (ConsultationDejaExistante($id_medecin, $id_patient, $jour_date, $heure_consult) ? " rendezvous-existants" : "") . "\" onclick=\"openModal('$jour_date')\">$jour</td>";
             }
             $jour++;    //On passe au lendemain ^^
         

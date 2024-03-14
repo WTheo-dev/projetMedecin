@@ -23,15 +23,15 @@ switch ($http_method) {
         try {
             $RETURN_CODE = 200;
             
-            if (isset($_GET['id_rendezvous'])) {
+            if (isset($_GET['id_consult'])) {
                 $STATUS_MESSAGE = "Voici le Rendez-Vous:";
-                $matchingData = uneConsultation($_GET['id_rendezvous']);
+                $matchingData = uneConsultation($_GET['id_consult']);
                 
                 if ($matchingData === null) {
                     throw new Exception("Aucun rendez-vous n'a été trouvé avec l'ID spécifié");
                 }
             } else {
-                if (isset($_GET['date_rdv'])) {
+                if (isset($_GET['date_consult'])) {
                     $STATUS_MESSAGE = "Voici la liste des rendez-vous du Jour :";
                     $matchingData = listeConsultationDuJour();
                 } else {
@@ -51,17 +51,18 @@ switch ($http_method) {
 
         case 'POST':
             $matchingData = null;
+            $id_consult=$data['id_consult'];
+            $date_consult = $data['date_consult'];
+            $heure_consult = $data['heure_consult'];
+            $duree_consult=$data['duree_consult'];
             $id_medecin = $data['id_medecin'];
-            $id_patient = $data['id_patient'];
-            $date_rdv = $data['date_rdv'];
-            $heure_rdv = $data['heure_rdv'];
-            
-            // Modification de la condition pour prendre en compte id_medecin, id_patient, date_rdv et heure_rdv
-            if (ConsultationDejaExistante($id_medecin, $id_patient, $date_rdv, $heure_rdv)) {
+            $id_usager = $data['id_usager']
+            // Modification de la condition pour prendre en compte id_medecin, id_usager, date_consult et heure_consult
+            if (ConsultationDejaExistante($id_consult,$date_consult, $heure_consult,$duree_consult, $id_medecin,$id_usager)) {
                 $RETURN_CODE = 400;
                 $STATUS_MESSAGE = "Création impossible, consultation déjà existante pour le même médecin et patient à la même heure";
             } else {
-                if (ajouterConsultation($data['id_patient'], $data['date_rdv'], $data['heure_rdv'], $data['duree_rdv'], $data['id_medecin'])) {
+                if (ajouterConsultation($data['id_consult'], $data['date_consult'], $data['heure_consult'], $data['duree_consult'], $data['id_medecin'], $data['id_usager'])) {
                     $RETURN_CODE = 200;
                     $STATUS_MESSAGE = "Création du rendez-vous effectué";
                 } else {
@@ -75,9 +76,9 @@ switch ($http_method) {
 
     case 'PUT':
         $matchingData = null;
-        $id_rendezvous = $_GET['id_rendezvous'];
+        $id_consult = $_GET['id_consult'];
 
-            if(modifierConsultation($id_rendezvous,$data['id_patient'],$data['date_rdv'],$data['heure_rdv'],$data['duree_rdv'], $data['id_medecin'])) {
+            if(modifierConsultation($id_consult,$data['date_consult'],$data['heure_consult'],$data['duree_consult'],$data['id_medecin'], $data['id_usager'])) {
                 $RETURN_CODE = 200;
                 $STATUS_MESSAGE = "Modifications du rendez-vous effectuée.";
             } else {
@@ -88,10 +89,10 @@ switch ($http_method) {
         break;
 
         case 'DELETE':
-            $id_rendezvous = $_GET['id_rendezvous'];
+            $id_consult = $_GET['id_consult'];
         
-            if ($id_rendezvous) {
-                $result = supprimerConsultation($id_rendezvous);
+            if ($id_consult) {
+                $result = supprimerConsultation($id_consult);
                 if ($result === true) {
                     $RETURN_CODE = 200;
                     $STATUS_MESSAGE = "Le rendez-vous a été supprimé avec succès.";
