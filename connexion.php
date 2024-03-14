@@ -1,42 +1,34 @@
 <?php
-// Inclure les dépendances nécessaires (jwt_utils.php et fonctions.php)
+
 require_once("./API_Medecin/jwt_utils.php");
 require_once("./API_Medecin/fonctions.php");
 
-// Définir l'algorithme de signature, la clé secrète, et initialiser la session
 $header = array("alg" => "HS256", "typ" => "JWT");
 $key = "pass";
 session_start();
 
-// Vérifier si le formulaire a été soumis
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        // Récupérer les données du formulaire
         $nom_utilisateur = isset($_POST['nom_utilisateur']) ? $_POST['nom_utilisateur'] : '';
         $mdp = isset($_POST['mdp']) ? $_POST['mdp'] : '';
 
-        // Vérifier les champs du formulaire
         if (empty($nom_utilisateur) || empty($mdp)) {
             throw new Exception("Veuillez remplir tous les champs du formulaire.");
         }
 
-        // Vérifier les informations d'identification
         if (identification($nom_utilisateur, $mdp)) {
-            // Créer le corps du JWT
-            $duree = 2592000; // Durée du token en secondes (30 jours dans cet exemple)
+            $duree = 2592000;
             $body = array(
                 "role" => recuperation_role($nom_utilisateur),
                 "utilisateur" => $nom_utilisateur,
                 "exp" => (time() + $duree)
             );
 
-            // Générer le token JWT
             $token = generate_jwt($header, $body, $key);
 
-            // Stocker le token dans la session
             $_SESSION['jwt_token'] = $token;
 
-            // Rediriger vers index.php
             header("Location: index.php");
             exit;
         } else {

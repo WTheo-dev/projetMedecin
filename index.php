@@ -48,16 +48,16 @@
 
     <?php
     require_once("calendrier.php");
-    calendrier(date("n"), date("Y"), $id_medecin, $id_patient, $heure_rdv);
+    calendrier(date("n"), date("Y"), ConsultationDejaExistante($id_medecin, $id_patient, $heure_rdv));
     ?>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
             <div id="modalContent"></div>
-            <button onclick="closeModal()">Fermer</button>
             <button onclick="ajouterModal()"> Ajouter </button>
             <button onclick="modifierModal()"> Modifier </button>
             <button onclick="saveModal()"> Sauvegarder </button>
+            <button onclick="closeModal()">Fermer</button>
         </div>
     </div>
 

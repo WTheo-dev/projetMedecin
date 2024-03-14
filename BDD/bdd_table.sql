@@ -28,55 +28,58 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `medecin`;
-CREATE TABLE IF NOT EXISTS `medecin` (
-  `id_medecin` int NOT NULL AUTO_INCREMENT,
-  `civilite` char(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `nom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `prenom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `id_utilisateur` int NOT NULL,
-  PRIMARY KEY (`id_medecin`),
-  UNIQUE KEY `id_utilisateur` (`id_utilisateur`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+CREATE TABLE IF NOT EXISTS `medecin`(
+   `id_medecin` INT AUTO_INCREMENT,
+   `civilite` VARCHAR(8) NOT NULL,
+   `nom` VARCHAR(50) NOT NULL,
+   `prenom` VARCHAR(50) NOT NULL,
+   `id_utilisateur` int NOT NULL,
+   CONSTRAINT PK_medecin PRIMARY KEY(`id_medecin`),
+   KEY `unique_id_utilisateur` (`id_utilisateur`)
+);
 -- --------------------------------------------------------
 
 --
--- Structure de la table `patient`
+-- Structure de la table `usager`
 --
 
-DROP TABLE IF EXISTS `patient`;
-CREATE TABLE IF NOT EXISTS `patient` (
-  `id_patient` int NOT NULL AUTO_INCREMENT,
-  `num_secu` char(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `civilite` char(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `nom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `prenom` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `adresse` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `date_naissance` date DEFAULT NULL,
-  `lieu_naissance` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`id_patient`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+DROP TABLE IF EXISTS `usager`;
+CREATE TABLE IF NOT EXISTS `usager`(
+   `id_usager` INT AUTO_INCREMENT,
+   `civilite` VARCHAR(50) NOT NULL,
+   `nom` VARCHAR(50) NOT NULL,
+   `prenom` VARCHAR(50) NOT NULL,
+   `sexe` CHAR(1) NOT NULL,
+   `adresse` VARCHAR(50) NOT NULL,
+   `code_postal` CHAR(5) NOT NULL,
+   `ville` VARCHAR(50) NOT NULL,
+   `date_nais` DATE NOT NULL,
+   `lieu_nais` VARCHAR(50) NOT NULL,
+   `num_secu` CHAR(15) NOT NULL,
+   CONSTRAINT PK_usager PRIMARY KEY(`id_usager`),
+   CONSTRAINT AK_usager UNIQUE(`num_secu`)
+);
 -- --------------------------------------------------------
 
 --
 -- Structure de la table `rendezvous`
 --
 
-DROP TABLE IF EXISTS `rendezvous`;
+DROP TABLE IF EXISTS `consultation`;
 
-CREATE TABLE IF NOT EXISTS `rendezvous` (
-  `id_rendezvous` int NOT NULL AUTO_INCREMENT,
-  `id_patient` int NOT NULL,
-  `date_rdv` date NOT NULL,
-  `heure_rdv` time NOT NULL,
-  `duree_rdv` time DEFAULT NULL,
-  `id_medecin` int NOT NULL,
-  PRIMARY KEY (`id_patient`, `id_rendezvous`),  
-  UNIQUE KEY `unique_id_rendezvous` (`id_rendezvous`),  
-  KEY `id_medecin` (`id_medecin`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+CREATE TABLE IF NOT EXISTS `consultation`(
+   `id_consult` INT AUTO_INCREMENT,
+   `date_consult` DATE NOT NULL,
+   `heure_consult` TIME NOT NULL,
+   `duree_consult` TIME NOT NULL,
+   `id_medecin` INT NOT NULL,
+   `id_usager` INT NOT NULL,
+   CONSTRAINT PK_consultation PRIMARY KEY(`id_consult`),
+   CONSTRAINT AK_consultation_idx2 UNIQUE(`id_medecin`, `date_consult`, `heure_consult`),
+   CONSTRAINT AK_consultation_idx1 UNIQUE(`id_usager`, `date_consult`, `heure_consult`),
+   CONSTRAINT FK_consultation_medecin FOREIGN KEY(`id_medecin`) REFERENCES medecin(`id_medecin`),
+   CONSTRAINT FK_consultation_usager FOREIGN KEY(`id_usager`) REFERENCES usager(`id_usager`)
+);
 
 -- --------------------------------------------------------
 
@@ -86,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `rendezvous` (
 
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE IF NOT EXISTS `role` (
-  `id_role` int NOT NULL AUTO_INCREMENT,
+  `id_role` int AUTO_INCREMENT,
   `description` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_role`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -99,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 DROP TABLE IF EXISTS `utilisateur`;
 CREATE TABLE IF NOT EXISTS `utilisateur` (
-  `id_utilisateur` int NOT NULL AUTO_INCREMENT,
+  `id_utilisateur` int AUTO_INCREMENT,
   `nom_utilisateur` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `mdp` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `id_role` int NOT NULL,
