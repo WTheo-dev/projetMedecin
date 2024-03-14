@@ -29,7 +29,7 @@
 
     <?php
 
-    require_once "API_Medecin/fonctions.php";
+    require_once("./CabMed/fonctions.php");
     $medecins = listeMedecin();
 
     echo '<div>';
@@ -48,6 +48,7 @@
 
     <?php
     require_once("calendrier.php");
+    require_once("./CabMed/fonctions.php");
     calendrier(date("n"), date("Y"), ConsultationDejaExistante($id_medecin, $id_patient, $heure_rdv));
     ?>
 

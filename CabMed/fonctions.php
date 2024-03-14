@@ -62,43 +62,43 @@ function clean($champEntrant)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-////////////////////       GESTION DES PATIENTS          ////////////////////
+////////////////////       GESTION DES usagerS          ////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-function listePatient()
+function listeusager()
 {
     $BD = connexionBD();
-    $listePatient = $BD->prepare('SELECT * from patient');
-    $listePatient->execute(array());
+    $listeusager = $BD->prepare('SELECT * from usager');
+    $listeusager->execute(array());
     $result = [];
-    foreach ($listePatient as $row) {
-        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance'], 'id_patient' => $row['id_patient']));
+    foreach ($listeusager as $row) {
+        array_push($result, array('id_usager' => $row['id_usager'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'sexe' => $row['sexe'], 'adresse' => $row['adresse'],  'code_postal' => $row['code_postal'],  'ville' => $row['ville'], 'date_nais' => $row['date_nais'], 'lieu_nais' => $row['lieu_nais'], 'num_secu' => $row['num_secu']));
     }
     return $result;
 }
 
-function unPatient($nom)
+function unusager($nom)
 {
     $BD = connexionBD();
     $nom = htmlspecialchars($nom);
-    $UnPatient = $BD->prepare('SELECT * from patient WHERE nom = ?');
-    $UnPatient->execute(array($nom));
+    $Unusager = $BD->prepare('SELECT * from usager WHERE nom = ?');
+    $Unusager->execute(array($nom));
     $BD = null;
     $result = [];
-    foreach ($UnPatient as $row) {
-        array_push($result, array('num_secu' => $row['num_secu'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'adresse' => $row['adresse'], 'date_naissance' => $row['date_naissance'], 'lieu_naissance' => $row['lieu_naissance'], 'id_patient' => $row['id_patient']));
+    foreach ($Unusager as $row) {
+        array_push($result, array('id_usager' => $row['id_usager'], 'civilite' => $row['civilite'], 'nom' => $row['nom'], 'prenom' => $row['prenom'], 'sexe' => $row['sexe'], 'adresse' => $row['adresse'],  'code_postal' => $row['code_postal'],  'ville' => $row['ville'], 'date_nais' => $row['date_nais'], 'lieu_nais' => $row['lieu_nais'], 'num_secu' => $row['num_secu']));
     }
     return $result;
 }
 
-function ajouterPatient($num_secu, $civilite, $nom, $prenom, $adresse, $date_naissance, $lieu_naissance)
+function ajouterusager($civilite, $nom, $prenom, $sexe, $adresse, $code_postal, $ville, $date_nais, $lieu_nais, $num_secu)
 {
     $BD = connexionBD();
-    if (!empty($num_secu) && !empty($civilite) && !empty($nom) && !empty($prenom) && !empty($adresse) && !empty($date_naissance) && !empty($lieu_naissance)) {
-        $ajouterPatient = $BD->prepare('INSERT INTO patient(num_secu, civilite, nom, prenom, adresse, date_naissance, lieu_naissance) VALUES (?, ?, ?, ?, ?, ?, ?)');
-        $ajouterPatient->execute(array($num_secu, $civilite, $nom, $prenom, $adresse, $date_naissance, $lieu_naissance));
+    if (!empty($civilite) && !empty($nom) && !empty($prenom) && !empty($sexe) && !empty($adresse) && !empty($code_postal) && !empty($ville) && !empty($date_nais) && !empty($lieu_nais) && !empty($num_secu)) {
+        $ajouterusager = $BD->prepare('INSERT INTO usager(civilite, nom, prenom, sexe, adresse, code_postal, ville, date_nais, lieu_nais, num_secu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $ajouterusager->execute(array($civilite, $nom, $prenom, $sexe, $adresse, $code_postal, $ville, $date_nais, $lieu_nais, $num_secu));
         $BD = null;
-        if ($ajouterPatient->rowCount() > 0) {
+        if ($ajouterusager->rowCount() > 0) {
             return TRUE;
         } else {
             return FALSE;
@@ -109,49 +109,52 @@ function ajouterPatient($num_secu, $civilite, $nom, $prenom, $adresse, $date_nai
 
 }
 
-function supprimerPatient($id_patient)
+function supprimerusager($id_usager)
 {
     $BD = connexionBD();
-    $id_patient = htmlspecialchars($id_patient);
-    $supprimerPatient = $BD->prepare('DELETE FROM patient where id_patient = ?');
-    $supprimerPatient->execute(array($id_patient));
+    $id_usager = htmlspecialchars($id_usager);
+    $supprimerusager = $BD->prepare('DELETE FROM usager where id_usager = ?');
+    $supprimerusager->execute(array($id_usager));
     $BD = null;
-    if ($supprimerPatient->rowCount() > 0) {
+    if ($supprimerusager->rowCount() > 0) {
         return TRUE;
     } else {
         return FALSE;
     }
 }
 
-function modifierPatient($id_patient, $num_secu, $civilite, $nom, $prenom, $adresse, $date_naissance, $lieu_naissance)
+function modifierusager($civilite, $nom, $prenom, $sexe, $adresse, $code_postal, $ville, $date_nais, $lieu_nais, $num_secu, $id_usager)
 {
     $BD = connexionBD();
-    $id_patient = htmlspecialchars($id_patient);
-    $num_secu = htmlspecialchars($num_secu);
+    $id_usager = htmlspecialchars($id_usager);
     $civilite = htmlspecialchars($civilite);
     $nom = htmlspecialchars($nom);
     $prenom = htmlspecialchars($prenom);
+    $sexe = htmlspecialchars($sexe);
     $adresse = htmlspecialchars($adresse);
-    $date_naissance = htmlspecialchars($date_naissance);
-    $lieu_naissance = htmlspecialchars($lieu_naissance);
-    $modifierPatient = $BD->prepare('UPDATE patient SET num_secu = ?, civilite = ?, nom = ?, prenom = ?, adresse = ?, date_naissance = ?, lieu_naissance = ? WHERE id_patient = ?');
-    $modifierPatient->execute(array($num_secu, $civilite, $nom, $prenom, $adresse, $date_naissance, $lieu_naissance, $id_patient));
+    $code_postal = htmlspecialchars($code_postal);
+    $ville = htmlspecialchars($ville);
+    $date_nais = htmlspecialchars($date_nais);
+    $lieu_nais = htmlspecialchars($lieu_nais);
+    $num_secu = htmlspecialchars($num_secu);
+    $modifierusager = $BD->prepare('UPDATE usager SET civilite = ?, nom = ?, prenom = ?, sexe = ?, adresse = ?, code_postal = ?, ville = ?, date_nais = ?, lieu_nais = ?, num_secu = ? WHERE id_usager = ?');
+    $modifierusager->execute(array($civilite, $nom, $prenom, $sexe, $adresse, $code_postal, $ville, $date_nais, $lieu_nais, $num_secu, $id_usager));
     $BD = null;
-    if ($modifierPatient->rowCount() > 0) {
+    if ($modifierusager->rowCount() > 0) {
         return TRUE;
     } else {
         return FALSE;
     }
 }
 
-function patientExisteDeja($num_secu)
+function usagerExisteDeja($num_secu)
 {
     $BD = connexionBD();
     $num_secu = htmlspecialchars($num_secu);
-    $patientExiste = $BD->prepare('SELECT * FROM patient WHERE num_secu = ?');
-    $patientExiste->execute(array($num_secu));
+    $usagerExiste = $BD->prepare('SELECT * FROM usager WHERE num_secu = ?');
+    $usagerExiste->execute(array($num_secu));
     $BD = null;
-    if ($patientExiste->rowCount() > 0) {
+    if ($usagerExiste->rowCount() > 0) {
         return TRUE;
     } else {
         return FALSE;
@@ -292,27 +295,27 @@ function MedecinExisteDeja($nom)
 
 
 /////////////////////////////////////////////////////////////////////////////
-////////////////////       GESTION DES RENDEZ-VOUS       ////////////////////
+////////////////////       GESTION DES CONSULTATIONS     ////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
 function listeConsultation()
 {
     $BD = connexionBD();
-    $listeConsultation = $BD->prepare('SELECT * from rendezvous');
+    $listeConsultation = $BD->prepare('SELECT * from consultation');
     $listeConsultation->execute(array());
     $BD = null;
     $result = [];
 
     foreach ($listeConsultation as $row) {
-        $formattedDate = date('d-m-Y', strtotime($row['date_rdv']));
+        $formattedDate = date('d-m-Y', strtotime($row['date_consult']));
         array_push(
             $result,
             array(
                 'Jour du rendez-vous' => $formattedDate,
-                'Heure du rendez-vous' => $row['heure_rdv'],
-                'Durée du Rendez-Vous' => $row['duree_rdv'],
+                'Heure du rendez-vous' => $row['heure_consult'],
+                'Durée du Rendez-Vous' => $row['duree_consult'],
                 'id_medecin' => $row['id_medecin'],
-                'id_rendezvous' => $row['id_rendezvous']
+                'id_consult' => $row['id_consult']
             )
         );
     }
@@ -320,23 +323,23 @@ function listeConsultation()
     return $result;
 }
 
-function uneConsultation($id_rendezvous)
+function uneConsultation($id_consult)
 {
     $BD = connexionBD();
-    $id_rendezvous = htmlspecialchars($id_rendezvous);
-    $uneConsultation = $BD->prepare('SELECT * FROM rendezvous WHERE id_rendezvous = ?');
-    $uneConsultation->execute(array($id_rendezvous));
+    $id_consult = htmlspecialchars($id_consult);
+    $uneConsultation = $BD->prepare('SELECT * FROM consultation WHERE id_consult = ?');
+    $uneConsultation->execute(array($id_consult));
     $BD = null;
     $result = [];
 
     foreach ($uneConsultation as $row) {
-        $formattedDate = date('d-m-Y', strtotime($row['date_rdv']));
+        $formattedDate = date('d-m-Y', strtotime($row['date_consult']));
         array_push(
             $result,
             array(
                 'Jour du rendez-vous' => $formattedDate,
-                'Heure du rendez-vous' => $row['heure_rdv'],
-                'Durée du Rendez-Vous' => $row['duree_rdv'],
+                'Heure du rendez-vous' => $row['heure_consult'],
+                'Durée du Rendez-Vous' => $row['duree_consult'],
                 'id_medecin' => $row['id_medecin']
             )
         );
@@ -353,7 +356,7 @@ function listeConsultationDuJour()
     setlocale(LC_TIME, 'fr_FR');
     $dateDuJour = (new DateTime())->format('d-m-Y');
 
-    $listeConsultationDuJour = $BD->prepare('SELECT * FROM rendezvous WHERE date_rdv = STR_TO_DATE(?, "%d-%m-%Y")');
+    $listeConsultationDuJour = $BD->prepare('SELECT * FROM consultation WHERE date_consult = STR_TO_DATE(?, "%d-%m-%Y")');
     $listeConsultationDuJour->execute(array($dateDuJour));
     $BD = null;
     $result = [];
@@ -363,9 +366,9 @@ function listeConsultationDuJour()
         array_push(
             $result,
             array(
-                'Date du rendez-vous' => (new DateTime($row['date_rdv']))->format('d-m-Y'),
-                'Heure du rendez-vous' => $row['heure_rdv'],
-                'Durée du rendez-vous' => $row['duree_rdv']
+                'Date du rendez-vous' => (new DateTime($row['date_consult']))->format('d-m-Y'),
+                'Heure du rendez-vous' => $row['heure_consult'],
+                'Durée du rendez-vous' => $row['duree_consult']
             )
         );
     }
@@ -376,18 +379,18 @@ function listeConsultationDuJour()
 
 
 
-function ajouterConsultation($id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
+function ajouterConsultation($date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager)
 {
     $BD = connexionBD();
-    $id_patient = htmlspecialchars($id_patient);
-    $date_rdv = htmlspecialchars($date_rdv);
-    $heure_rdv = htmlspecialchars($heure_rdv);
-    $duree_rdv = htmlspecialchars($duree_rdv);
+    $date_consult = htmlspecialchars($date_consult);
+    $heure_consult = htmlspecialchars($heure_consult);
+    $duree_consult = htmlspecialchars($duree_consult);
     $id_medecin = htmlspecialchars($id_medecin);
-    $ajouterConsultation = $BD->prepare('INSERT INTO rendezvous (id_patient, date_rdv, heure_rdv, duree_rdv, id_medecin) VALUES (?, ?, ?, ?, ?)');
+    $id_usager = htmlspecialchars($id_usager);
+    $ajouterConsultation = $BD->prepare('INSERT INTO consultation (date_consult, heure_consult, duree_consult, id_medecin, id_usager) VALUES (?, ?, ?, ?, ?)');
 
     // Exécution de la requête préparée
-    $success = $ajouterConsultation->execute(array(clean($id_patient), clean($date_rdv), clean($heure_rdv), clean($duree_rdv), clean($id_medecin)));
+    $success = $ajouterConsultation->execute(array(clean($date_consult), clean($heure_consult), clean($duree_consult), clean($id_medecin), clean($id_usager)));
 
     $BD = null;
 
@@ -400,30 +403,30 @@ function ajouterConsultation($id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id
 }
 
 
-function modifierConsultation($id_rendezvous, $id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin)
+function modifierConsultation($id_consult, $date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager)
 {
     $BD = connexionBD();
-    $id_patient = htmlspecialchars($id_patient);
-    $date_rdv = htmlspecialchars($date_rdv);
-    $heure_rdv = htmlspecialchars($heure_rdv);
-    $duree_rdv = htmlspecialchars($duree_rdv);
+    $id_usager = htmlspecialchars($id_usager);
+    $date_consult = htmlspecialchars($date_consult);
+    $heure_consult = htmlspecialchars($heure_consult);
+    $duree_consult = htmlspecialchars($duree_consult);
     $id_medecin = htmlspecialchars($id_medecin);
-    $modifierRendezvous = $BD->prepare('UPDATE rendezvous SET id_patient = ?, date_rdv = ?, heure_rdv = ?, duree_rdv = ? , id_medecin = ? WHERE id_rendezvous = ?');
-    $modifierRendezvous->execute(array($id_patient, $date_rdv, $heure_rdv, $duree_rdv, $id_medecin, $id_rendezvous));
+    $modifierconsultation = $BD->prepare('UPDATE consultation SET date_consult = ?, heure_consult = ?, duree_consult = ? , id_medecin = ?, id_usager = ? WHERE id_consult = ?');
+    $modifierconsultation->execute(array($date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager, $id_consult));
     $BD = null;
-    if ($modifierRendezvous->rowCount() > 0) {
+    if ($modifierconsultation->rowCount() > 0) {
         return TRUE;
     } else {
         return FALSE;
     }
 }
 
-function supprimerConsultation($id_rendezvous)
+function supprimerConsultation($id_consult)
 {
     $BD = connexionBD();
-    $id_rendezvous = htmlspecialchars($id_rendezvous);
-    $supprimerConsultation = $BD->prepare('DELETE from rendezvous WHERE id_rendezvous = ?');
-    $supprimerConsultation->execute(array($id_rendezvous));
+    $id_consult = htmlspecialchars($id_consult);
+    $supprimerConsultation = $BD->prepare('DELETE from consultation WHERE id_consult = ?');
+    $supprimerConsultation->execute(array($id_consult));
     $BD = null;
     if ($supprimerConsultation->rowCount() > 0) {
         return TRUE;
@@ -432,15 +435,17 @@ function supprimerConsultation($id_rendezvous)
     }
 }
 
-function ConsultationDejaExistante($id_medecin, $id_patient, $date_rdv, $heure_rdv)
+function ConsultationDejaExistante($id_consult, $date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager)
 {
     $BD = connexionBD();
-    $id_patient = htmlspecialchars($id_patient);
-    $date_rdv = htmlspecialchars($date_rdv);
-    $heure_rdv = htmlspecialchars($heure_rdv);
+    $id_consult = htmlspecialchars($id_consult);
+    $date_consult = htmlspecialchars($date_consult);
+    $heure_consult = htmlspecialchars($heure_consult);
+    $duree_consult = htmlspecialchars($duree_consult);
     $id_medecin = htmlspecialchars($id_medecin);
-    $consultationExiste = $BD->prepare('SELECT * FROM rendezvous WHERE id_medecin = ? AND id_patient = ? AND date_rdv = ? AND heure_rdv = ?');
-    $consultationExiste->execute(array($id_medecin, $id_patient, $date_rdv, $heure_rdv));
+    $id_usager = htmlspecialchars($id_usager);
+    $consultationExiste = $BD->prepare('SELECT * FROM consultation WHERE id_consult = ? AND date_consult = ? AND heure_consult = ? AND duree_consult = ? AND id_medecin = ? AND id_usager = ?');
+    $consultationExiste->execute(array($id_medecin, $id_usager, $date_consult, $heure_consult));
     $BD = null;
 
     if ($consultationExiste->rowCount() > 0) {

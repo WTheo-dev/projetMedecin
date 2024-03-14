@@ -1,6 +1,6 @@
 <?php
 
-require_once "API_Medecin/fonctions.php";
+require_once("./CabMed/fonctions.php");
 
 //FONCTION PRINCIPALE DU CALENDRIER
 function calendrier($m_donne,$a_donne, $id_medecin, $id_patient, $heure_rdv){
