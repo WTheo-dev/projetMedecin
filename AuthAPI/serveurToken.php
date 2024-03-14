@@ -1,7 +1,7 @@
 <?php
 
-require_once("jwt_utils.php");
-require_once("fonctions.php");
+require_once("../CabMed/jwt_utils.php");
+require_once("../CabMed/fonctions.php");
 
 $header = array("alg" => "HS256", "typ"=>"JWT");
 $key = "pass";
