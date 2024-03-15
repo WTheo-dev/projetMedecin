@@ -58,7 +58,7 @@ switch ($http_method) {
             $id_medecin = $data['id_medecin'];
             $id_usager = $data['id_usager']
             // Modification de la condition pour prendre en compte id_medecin, id_usager, date_consult et heure_consult
-            if (ConsultationDejaExistante($id_consult,$date_consult, $heure_consult,$duree_consult, $id_medecin,$id_usager)) {
+            if (ConsultationDejaExistante($id_consult, $date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager)) {
                 $RETURN_CODE = 400;
                 $STATUS_MESSAGE = "Création impossible, consultation déjà existante pour le même médecin et patient à la même heure";
             } else {
