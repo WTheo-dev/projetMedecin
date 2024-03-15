@@ -49,7 +49,7 @@
     <?php
     require_once("calendrier.php");
     require_once("./CabMed/fonctions.php");
-    calendrier(date("n"), date("Y"), ConsultationDejaExistante($id_medecin, $id_patient, $heure_rdv));
+    calendrier(date("n"), date("Y"), ConsultationDejaExistante($id_medecin, $id_patient, $heure_consult));
     ?>
 
     <div id="myModal" class="modal">
