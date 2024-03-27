@@ -6,10 +6,10 @@
 
 function connexionBD()
 {
-    $SERVER = '127.0.0.1';
-    $BD = 'medecin';
-    $LOGIN = 'root';
-    $MDP = '';
+    $SERVER = 'mysql-cabinetauth.alwaysdata.net';
+    $BD = 'cabinetauth_medecin';
+    $LOGIN = '353450';
+    $MDP = '$iutinfo';
 
     try {
         $BD = new PDO("mysql:host=$SERVER;dbname=$BD", $LOGIN, $MDP);
