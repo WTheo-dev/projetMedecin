@@ -35,5 +35,5 @@
     (3, 'utilisateur3', 'motdepasse3', 1),
     (4, 'utilisateur4', 'motdepasse4', 1),
     (5, 'utilisateur5', 'motdepasse5', 1),
-    (6, 'utilisateur6', 'motdepasse6', 2),
+    (6, 'secretaire1', 'password1234!', 2),
     (7, 'utilisateur7', 'motdepasse7', 3);

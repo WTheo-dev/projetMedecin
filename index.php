@@ -49,7 +49,31 @@
     <?php
     require_once("calendrier.php");
     require_once("./CabMed/fonctions.php");
-    calendrier(date("n"), date("Y"), ConsultationDejaExistante($id_medecin,$id_usager, $heure_rdv));
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        try {
+            $date_consult  = isset($_POST['date_consult']) ? $_POST['date_consult'] : '';
+            $heure_consult = isset($_POST['heure_consult']) ? $_POST['heure_consult'] : '';
+            $duree_consult = isset($_POST['duree_consult']) ? $_POST['duree_consult'] : '';
+            $id_medecin    = isset($_POST['id_medecin']) ? $_POST['id_medecin'] : ''; 
+            $id_usager     = isset($_POST['id_usager']) ? $_POST['id_usager'] : '';
+    
+            if (ConsultationDejaExistante($date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager)) {
+                throw new Exception("Création impossible, consultation déjà existante pour le même médecin et patient à la même heure");
+            } else {
+                if (ajouterConsultation($data['id_consult'], $data['date_consult'], $data['heure_consult'], $data['duree_consult'], $data['id_medecin'], $data['id_usager'])) {
+                    throw new Exception("Création du rendez-vous effectué");
+                } else {
+                    throw new Exception("Création impossible ou rendez-vous déjà existant");
+                }
+            }
+        } catch (Exception $e) {
+            $erreur_message = $e->getMessage();
+        }
+    }
+
+
+
     ?>
 
     <div id="myModal" class="modal">

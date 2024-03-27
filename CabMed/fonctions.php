@@ -28,11 +28,12 @@ function identification($nom_utilisateur, $mdp)
 
     $verificationMembre = $BD->prepare('SELECT * FROM utilisateur WHERE nom_utilisateur = ? AND mdp = ?');
     $verificationMembre->execute(array($nom_utilisateur, $mdp));
+    $hashed_password = $verificationMembre->fetchColumn();
     $BD = null;
-    if ($verificationMembre->rowCount() > 0) {
-        return TRUE;
+    if ($hashed_password && password_verify($mdp, $hashed_password)) {
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -445,7 +446,7 @@ function ConsultationDejaExistante($id_consult, $date_consult, $heure_consult, $
     $id_medecin = htmlspecialchars($id_medecin);
     $id_usager = htmlspecialchars($id_usager);
     $consultationExiste = $BD->prepare('SELECT * FROM consultation WHERE id_consult = ? AND date_consult = ? AND heure_consult = ? AND duree_consult = ? AND id_medecin = ? AND id_usager = ?');
-    $consultationExiste->execute(array($id_medecin, $id_usager, $date_consult, $heure_consult));
+    $consultationExiste->execute(array($date_consult, $heure_consult, $duree_consult, $id_medecin, $id_usager));
     $BD = null;
 
     if ($consultationExiste->rowCount() > 0) {

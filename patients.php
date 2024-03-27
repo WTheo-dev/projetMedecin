@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabinet Médical - Patients</title>
-    <link rel="stylesheet" href="patients.css">
+    <title>Cabinet Médical - usagers</title>
+    <link rel="stylesheet" href="usagers.css">
 </head>
 <body>
     <?php 
     session_start(); // Démarrer la session
     include 'header.php'; 
     ?>
-    <h2>Liste des Patients</h2>
+    <h2>Liste des usagers</h2>
 
     <?php
     // Vérifier si le token est présent dans la session
@@ -19,8 +19,8 @@
         $token = $_SESSION['jwt_token'];
 
         try {
-            // Utilisez le token dans votre API pour récupérer la liste des patients
-            $api_url = "http://localhost/projetMedecin/API_Medecin/API_Patient.php";
+            // Utilisez le token dans votre API pour récupérer la liste des usagers
+            $api_url = "http://localhost/projetMedecin/CabMed/GestionPatients.php";
             
 
             $options = [
@@ -37,29 +37,32 @@
             $data = json_decode($response, true);
 
             if (isset($data['data']) && !empty($data['data'])) {
-                // Afficher la liste des patients dans un tableau
-                echo "<a href='ajouter_patient.php'><button>Ajouter un patient</button></a>";
+                // Afficher la liste des usagers dans un tableau
+                echo "<a href='ajouter_patient.php'><button>Ajouter un usager</button></a>";
 
                 echo "<table border='1'>";
-                echo "<tr><th>Civilité</th><th>Nom</th><th>Prénom</th><th>Adresse</th><th>ID Patient</th><th>Actions</th></tr>";
+                echo "<tr><th>ID usager</th><th>Civilité</th><th>Nom</th><th>Prénom</th><th>Sexe</th><th>Adresse</th><th>Code postal</th><th>Ville</th><th>Actions</th></tr>";
                 
-                foreach ($data['data'] as $patient) {
+                foreach ($data['data'] as $usager) {
                     echo "<tr>";
-                    echo "<td>" . $patient['civilite'] . "</td>";
-                    echo "<td>" . $patient['nom'] . "</td>";
-                    echo "<td>" . $patient['prenom'] . "</td>";
-                    echo "<td>" . $patient['adresse'] . "</td>";
-                    echo "<td>" . $patient['id_patient'] . "</td>";
+                    echo "<td>" . $usager['id_usager'] . "</td>";
+                    echo "<td>" . $usager['civilite'] . "</td>";
+                    echo "<td>" . $usager['nom'] . "</td>";
+                    echo "<td>" . $usager['prenom'] . "</td>";
+                    echo "<td>" . $usager['sexe'] . "</td>";
+                    echo "<td>" . $usager['adresse'] . "</td>";
+                    echo "<td>" . $usager['code_postal'] . "</td>";
+                    echo "<td>" . $usager['ville'] . "</td>";
                     echo "<td>
-                            <a href='modifier_patient.php?id=" . $patient['id_patient'] . "'>Modifier</a>
-                            <a href='supprimer_patient.php?id=" . $patient['id_patient'] . "'>Supprimer</a>
+                            <a href='modifier_patient.php?id=" . $usager['id_usager'] . "'>Modifier</a>
+                            <a href='supprimer_patient.php?id=" . $usager['id_usager'] . "'>Supprimer</a>
                           </td>";
                     echo "</tr>";
                 }
                 
                 echo "</table>";
             } else {
-                echo "Aucun patient trouvé.";
+                echo "Aucun usager trouvé.";
             }
            
 
